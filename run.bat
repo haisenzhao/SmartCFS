@@ -2,15 +2,15 @@ ECHO ON
 
 cd build/Release
 
-rem SmartCFS.exe ..\..\workspace\fertility\volume_1_100\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_2_r100_1\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_2_r100_2\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_2_r100_3\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_3_r0d5_0d7_r0d5\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_4_0d7_0_0d7\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_5_r0d7_0_r0d7\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_6_0d5_0d7_0d5\ 2.0 0.9 1 0 0
-rem SmartCFS.exe ..\..\workspace\fertility\volume_7_0_0d7_0d7\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_1_100\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_2_r100_1\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_2_r100_2\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_2_r100_3\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_3_r0d5_0d7_r0d5\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_4_0d7_0_0d7\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_5_r0d7_0_r0d7\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_6_0d5_0d7_0d5\ 2.0 0.9 1 0 0
+SmartCFS.exe ..\..\workspace\fertility\volume_7_0_0d7_0d7\ 2.0 0.9 1 0 0
 
 
 rem SmartCFS.exe ..\..\workspace\bunny\volume_1_00r1\ 2.0 0.9 0 0 0
@@ -82,5 +82,5 @@ rem SmartCFS.exe ..\..\workspace\cage\volume_5\ 2.0 0.9 1 0 0 6
 rem SmartCFS.exe ..\..\workspace\cage\volume_6\ 2.0 0.9 1 0 0 7
 rem SmartCFS.exe ..\..\workspace\cage\volume_7\ 2.0 0.9 1 0 0 8
 rem SmartCFS.exe ..\..\workspace\cage\volume_8\ 2.0 0.9 1 0 0 9
-SmartCFS.exe ..\..\workspace\cage\volume_9\ 2.0 0.9 1 0 0 10
+rem SmartCFS.exe ..\..\workspace\cage\volume_9\ 2.0 0.9 1 0 0 10
 

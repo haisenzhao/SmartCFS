@@ -277,7 +277,7 @@ namespace cnc {
 			OutputFinalNGC(path + "output\\first.ngc", rough_machining_path, origin_n);
 
 			//std::string folder_name
-			OutputCLS(folder_name,"Z:\\Documents\\Windows\\SmartSFC\\workspace\\" + folder_name + ".cls", rough_machining_path, origin_n);
+			OutputCLS(folder_name, path + folder_name + ".cls", rough_machining_path, origin_n);
 
 			double length = Strip::GetTotalLength(rough_machining_path);
 			std::cerr << "Total length: " << length << std::endl;
@@ -1315,7 +1315,7 @@ namespace cnc {
 		file << "PAINT/COLOR,211" << std::endl;
 
 		file << "PAINT/COLOR,42" << std::endl;
-		file << "FEDRAT/MMPM,1000.0000" << std::endl;
+		file << "FEDRAT/MMPM,5000.0000" << std::endl;
 
 		for (int i = 1; i < rough_machining_path.size(); i++)
 		{
