@@ -973,10 +973,8 @@ namespace hpcg {
 	{
 		std::ofstream file(out_path);
 		file << vecs.size() << std::endl;
-		for (int i = 0; i < vecs.size(); i++){
-			file << vecs[i][0] << " " << vecs[i][1] << " " << vecs[i][2] << " ";
-		}
-
+		for (int i = 0; i < vecs.size(); i++)
+			file << vecs[i][0] << " " << vecs[i][1] << " " << vecs[i][2] <<std::endl;
 		file.clear();
 		file.close();
 	}

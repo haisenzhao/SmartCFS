@@ -49,7 +49,8 @@ namespace cnc {
 		void OutputCLS(const std::string folder_name, const std::string output_path, const Vector3d1 &rough_machining_path, const Vector3d &plane_n);
 		void OutputFinalNGC(const std::string output_path, const Vector3d1 &rough_machining_path, const Vector3d &plane_n);
 
-		void MeshSlicer(const std::string &path, const std::string off_path, const Vector3d &plane_n, const std::vector<double> &plane_d, const glm::dmat4 &rm,
+		void MeshSlicer(const std::string &path, const std::string off_path, const Vector3d &plane_n, const double &layer_thichness,
+			const std::vector<double> &plane_d, const glm::dmat4 &rm,
 			const double toolpath_size, Vector3d3 &rough_boundaries);
 	};
 

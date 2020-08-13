@@ -78,9 +78,8 @@ namespace cnc {
 
 		for (double d = minimal_d; d < maximal_d; d = d + layer_thichness)
 			plane_d.emplace_back(d);
-
-		if (Math::IsAlmostZero(plane_n[2] + 1))
-			std::reverse(plane_d.begin(), plane_d.end());
+		plane_d.emplace_back(plane_d.back() + layer_thichness);
+		plane_d.emplace_back(plane_d.back() + layer_thichness);
 
 		file.clear();
 		file.close();
@@ -184,7 +183,7 @@ namespace cnc {
 		//mesh slicer
 		std::cerr << "# Mesh slicer..." << std::endl;
 		Vector3d3 rough_boundaries;
-		MeshSlicer(path, path + off_file, plane_n, plane_d, rm, cfs.toolpath_size, rough_boundaries);
+		MeshSlicer(path, path + off_file, plane_n, layer_thichness, plane_d, rm, cfs.toolpath_size, rough_boundaries);
 		int rough_b_nb = 0;
 		for (auto & boud : rough_boundaries) rough_b_nb += boud.size();
 		if (rough_b_nb == 0)
@@ -192,7 +191,6 @@ namespace cnc {
 			std::cerr << "if (rough_b_nb == 0)" << std::endl;
 			system("pause");
 		}
-
 
 		if (output_debug_offset)
 		{
@@ -348,7 +346,7 @@ namespace cnc {
 	};
 
 	void RoughMachining::MeshSlicer(const std::string &path, const std::string off_path,
-		const Vector3d &plane_n, const std::vector<double> &plane_d, const glm::dmat4 &rm, const double toolpath_size, Vector3d3 &rough_boundaries)
+		const Vector3d &plane_n, const double &layer_thichness, const std::vector<double> &plane_d, const glm::dmat4 &rm, const double toolpath_size, Vector3d3 &rough_boundaries)
 	{
 		Vector3d3 removed_offsets;
 		
@@ -366,6 +364,12 @@ namespace cnc {
 				system("pause");
 			}
 
+			//extend the final layer
+			original_offsetses[original_offsetses.size() - 2] = original_offsetses[original_offsetses.size() - 3];
+			original_offsetses[original_offsetses.size() - 1] = original_offsetses[original_offsetses.size() - 2];
+
+			for (auto&offsets : original_offsetses[original_offsetses.size() - 2]) for (auto&offset : offsets)offset[2] = plane_d[plane_d.size() - 2];
+			for (auto&offsets : original_offsetses[original_offsetses.size() - 1]) for (auto&offset : offsets)offset[2] = plane_d[plane_d.size() - 1];
 
 			if (output_debug_offset)
 			{
@@ -376,7 +380,6 @@ namespace cnc {
 					Circuit::OutputOffsets(path + "boundary\\boudary_original_" + std::to_string(i) + ".obj", a, "boudary_original_" + std::to_string(i));
 				}
 			}
-
 
 			for (int i = 0; i < original_offsetses.size(); i++)
 			{
