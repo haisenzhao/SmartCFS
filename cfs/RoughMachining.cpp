@@ -78,8 +78,9 @@ namespace cnc {
 
 		for (double d = minimal_d; d < maximal_d; d = d + layer_thichness)
 			plane_d.emplace_back(d);
-		plane_d.emplace_back(plane_d.back() + layer_thichness);
-		plane_d.emplace_back(plane_d.back() + layer_thichness);
+
+		//plane_d.emplace_back(plane_d.back() + layer_thichness);
+		//plane_d.emplace_back(plane_d.back() + layer_thichness);
 
 		file.clear();
 		file.close();
@@ -99,23 +100,42 @@ namespace cnc {
 		output_debug_offset = output_debug;
 		output_rerun = re_running;
 
-		auto RoughPathGeneration = [&](const std::vector<double> &plane_d, const Vector3d &plane_n,
+		auto RoughPathGeneration = [&](const std::vector<double> &plane_d, const Vector3d &plane_n, const double &layer_thichness,
 			const std::vector<BaseNode> &base_nodes, const std::vector<std::vector<int>> &sequences, const glm::dmat4 &rm)
 		{
+			double extracting_back_distance = 20.0;
+
 			DWORD start_time = GetTickCount();
 
 			Vector3d1 rough_machining_path;
 			for (int i = 0; i < sequences.size(); i++)
 			{
-				//if (i != 3)continue;
+				//if (i != 1)continue;
 				std::cerr << "RoughMachining Iteration: " << i << std::endl;
 
 				Vector3d3 rough_boundaries_0;
 				std::vector<double> plane_d_0;
-				for (auto seq : sequences[i])
+
+				for (int seq_index = 0; seq_index < sequences[i].size();seq_index++)
 				{
+					auto seq = sequences[i][seq_index];
+
 					rough_boundaries_0.emplace_back(base_nodes[seq].boundary);
 					plane_d_0.emplace_back(base_nodes[seq].plane_d);
+					
+					if (seq_index == sequences[i].size() - 1)
+					{
+						auto boundary_1 = base_nodes[seq].boundary;
+						for (auto& a : boundary_1)for (auto&b : a)b[2] = b[2] + layer_thichness;
+						rough_boundaries_0.emplace_back(boundary_1);
+						plane_d_0.emplace_back(base_nodes[seq].plane_d + layer_thichness);
+
+						auto boundary_2 = base_nodes[seq].boundary;
+						for (auto& a : boundary_2)for (auto&b : a)b[2] = b[2] + 2*layer_thichness;
+						rough_boundaries_0.emplace_back(boundary_2);
+						plane_d_0.emplace_back(base_nodes[seq].plane_d + 2*layer_thichness);
+
+					}
 				}
 
 				auto segment_path = GenerateToolpathForOneVolume(i, path, rough_boundaries_0, plane_d_0, re_running,rm);
@@ -132,12 +152,12 @@ namespace cnc {
 					for (auto p : segment_path)
 						rough_machining_path.emplace_back(p);
 					rough_machining_path.emplace_back(segment_path.back());
-					rough_machining_path.back()[2] = plane_d[0] + 2.0*(-plane_n.z);
+					rough_machining_path.back()[2] = plane_d[0] + extracting_back_distance*(-plane_n.z);
 				}
 				else
 				{
 					rough_machining_path.emplace_back(segment_path.front());
-					rough_machining_path.back()[2] = plane_d[0] + 2.0*(-plane_n.z);
+					rough_machining_path.back()[2] = plane_d[0] + extracting_back_distance*(-plane_n.z);
 
 					//helix
 					rough_machining_path.emplace_back(segment_path.front());
@@ -149,7 +169,7 @@ namespace cnc {
 					for (auto p : segment_path)
 						rough_machining_path.emplace_back(p);
 					rough_machining_path.emplace_back(segment_path.back());
-					rough_machining_path.back()[2] = plane_d[0] + 2.0*(-plane_n.z);
+					rough_machining_path.back()[2] = plane_d[0] + extracting_back_distance*(-plane_n.z);
 				}
 			}
 
@@ -262,7 +282,7 @@ namespace cnc {
 				//sequence order
 				//TODO
 
-				rough_machining_path = RoughPathGeneration(plane_d, plane_n, base_nodes, sequences, rm);
+				rough_machining_path = RoughPathGeneration(plane_d, plane_n, layer_thichness, base_nodes, sequences, rm);
 				OutputVectors(path + "output\\rough_machining_path.txt", rough_machining_path);
 			}
 
@@ -365,11 +385,10 @@ namespace cnc {
 			}
 
 			//extend the final layer
-			original_offsetses[original_offsetses.size() - 2] = original_offsetses[original_offsetses.size() - 3];
-			original_offsetses[original_offsetses.size() - 1] = original_offsetses[original_offsetses.size() - 2];
-
-			for (auto&offsets : original_offsetses[original_offsetses.size() - 2]) for (auto&offset : offsets)offset[2] = plane_d[plane_d.size() - 2];
-			for (auto&offsets : original_offsetses[original_offsetses.size() - 1]) for (auto&offset : offsets)offset[2] = plane_d[plane_d.size() - 1];
+			//original_offsetses[original_offsetses.size() - 2] = original_offsetses[original_offsetses.size() - 3];
+			//original_offsetses[original_offsetses.size() - 1] = original_offsetses[original_offsetses.size() - 2];
+			//for (auto&offsets : original_offsetses[original_offsetses.size() - 2]) for (auto&offset : offsets)offset[2] = plane_d[plane_d.size() - 2];
+			//for (auto&offsets : original_offsetses[original_offsetses.size() - 1]) for (auto&offset : offsets)offset[2] = plane_d[plane_d.size() - 1];
 
 			if (output_debug_offset)
 			{
@@ -752,10 +771,6 @@ namespace cnc {
 							base_nodes.emplace_back(n);
 						}
 					}
-
-				
-
-					
 				}
 			}
 
@@ -777,7 +792,7 @@ namespace cnc {
 				{
 					auto name = "base_node_" + IntString(i) + "_" + std::to_string(base_nodes[i].layer);
 					auto a = PosApplyM(base_nodes[i].boundary, glm::inverse(rm));
-					Circuit::OutputOffsets(path + "boundary\\" + name + ".obj", base_nodes[i].boundary, name);
+					Circuit::OutputOffsets(path + "boundary\\" + name + ".obj", a, name);
 					name = "base_node_tri_" + IntString(i) + "_" + std::to_string(base_nodes[i].layer);
 					OutputNodeTriangles(path + "boundary\\" + name + ".obj", base_nodes[i].boundary, rm);
 				}
@@ -1567,7 +1582,6 @@ namespace cnc {
 			{
 				std::cerr << "if (cfs.single_path.empty())" << std::endl;
 				system("pause");
-
 				cfs.ClearAll();
 				cfs.cfs_index = i;
 				//OffsetsBasedCFSLinking_Framework(path, rough_boundaries[i], re_running);
@@ -1587,8 +1601,12 @@ namespace cnc {
 
 
 			auto v = PosApplyM(layer_path, glm::inverse(rm));
-			cfs.OutputStripNGC(path + "path\\layer_spiral_" + std::to_string(segment_index) + "_" + std::to_string(i) + ".ngc", v);
-			Circuit::OutputStrip(path + "path\\layer_spiral_" + std::to_string(segment_index) + "_" + std::to_string(i) + ".obj", v);
+			auto pre_name = path + "path\\layer_spiral_" + std::to_string(segment_index) + "_" + std::to_string(i);
+
+			cfs.OutputStripNGC(pre_name + ".ngc", v);
+			Circuit::OutputStrip(pre_name + ".obj", v);
+
+			Circuit::OutputOffsets(path + "path\\layer_offsets_" + std::to_string(segment_index) + "_" + std::to_string(i)+".obj", cfs.offsets, "offsets");
 
 			layer_pathes.emplace_back(layer_path);
 			//break;

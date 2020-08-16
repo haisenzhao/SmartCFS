@@ -473,13 +473,22 @@ namespace hpcg {
 	}
 
 
-	inline std::vector<std::vector<Vector3d>> PosApplyM(const std::vector<std::vector<Vector3d>>& veces, const glm::dmat4& M)
+	inline Vector3d2 PosApplyM(const Vector3d2& veces, const glm::dmat4& M)
 	{
-		std::vector<std::vector<Vector3d>> pses;
+		Vector3d2 pses;
 		for (auto vecs : veces)
 			pses.emplace_back(PosApplyM(vecs, M));
 		return pses;
 	}
+
+	inline Vector3d3 PosApplyM(const Vector3d3& veces, const glm::dmat4& M)
+	{
+		Vector3d3 pses;
+		for (auto vecs : veces)
+			pses.emplace_back(PosApplyM(vecs, M));
+		return pses;
+	}
+
 
 	inline glm::dmat4 RotationMatrix(const Vector3d& n, double angle)
 	{

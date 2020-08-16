@@ -113,8 +113,9 @@ namespace cnc {
 		Vector3d3 offset_graph_sharing_parts_no_par;
 		std::vector<int> mst;
 
-
 		BuildOffsets(boundaries, offsetses, offsets);
+
+		Circuit::OutputOffsets(path + "path\\offsets.obj", offsets, "offsets");
 
 		//if (!magic_number)
 		//{
@@ -123,13 +124,7 @@ namespace cnc {
 		//	offsets = boundaries;
 		//}
 
-		Circuit::OutputOffsets(path + "path\\offsets.obj", offsets, "offsets");
-
-		if (offsets.size() == 1)
-		{
-			single_path = offsets[0];
-		}
-
+		if (offsets.size() == 1) single_path = offsets[0];
 
 		if (!std::ifstream(input_path + "path\\" + IntString(cfs_index) + ".path", std::ios::in) || re_running)
 		{
@@ -144,12 +139,10 @@ namespace cnc {
 				//OutputStrips(path + "debug\\sharing_" + IntString(i) + ".obj", offset_graph_sharing_parts_no_par[i]);
 			}
 
-			//
-
 			//minimal spanning tree
 			Tree::MinimalSpanningTree(offsets, offset_graph, parts_length, mst);
-			Output_tree(offsets.size(), offset_graph, "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\1.gml");
-			Output_tree(offsets.size(), mst, "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\2.gml");
+			Output_tree(offsets.size(), offset_graph, path+"path\\1.gml");
+			Output_tree(offsets.size(), mst, path + "path\\2.gml");
 
 			//input nodes and edges
 			InputDataStructure(offsetses, offset_graph_sharing_parts_no_par, mst, offset_graph);
@@ -2062,12 +2055,12 @@ void CFSCNC::ShowScallopComputation()
 			if (!ConnectTwoContours(index_0, index_1))
 			{
 				int edge_id = -1;
-				if (GetEdgeid(index_0, index_1, edge_id))
-				{
-					std::cout << "False edge id: " << edge_id << std::endl;
-				}
-					std::cout << "False connecting: " << index_0 << " " << index_1 << std::endl;
+				if (GetEdgeid(index_0, index_1, edge_id)) std::cout << "False edge id: " << edge_id << std::endl;
+				std::cout << "False connecting: " << index_0 << " " << index_1 << std::endl;
+				
 				fermat_success = false;
+				std::cerr << "Bug: if (!ConnectTwoContours(index_0, index_1))" << std::endl;
+				system("pause");
 			}
 		}
 
@@ -2168,7 +2161,7 @@ void CFSCNC::ShowScallopComputation()
 				Vector3d source_p_0 = parts_0[i][j];//cutting point of source node
 				Vector3d source_p_1 = Circuit::FindNearestPoint(source_p_0, target_node->points);//cutting point of target node
 
-				Vector3d2 delta_ps_0; //the forward and backwark point list along source node from source_p_0
+				Vector3d2 delta_ps_0; //the forward and backward point list along source node from source_p_0
 				Vector3d2 delta_ps_1;//the forward and backward point list along target node from source_p_1
 				/*****************************************************/
 				delta_ps_0 = Circuit::DeltaDEuclideanDistance(source_p_0, toolpath_size, source_node->points);

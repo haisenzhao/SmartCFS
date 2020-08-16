@@ -832,7 +832,7 @@ namespace cnc {
 				{
 					auto s = offsets[i][j];
 					auto e = offsets[i][(j + 1) % offsets[i].size()];
-					CGAL_Export_Path_Segment(debug_file, debug_index, name, 1.0, 0.0, 0.0, s, e, 0.1);
+					CGAL_Export_Path_Segment(debug_file, debug_index, name+"_"+std::to_string(i), 1.0, 0.0, 0.0, s, e, 0.1);
 				}
 			}
 			debug_file.clear();
