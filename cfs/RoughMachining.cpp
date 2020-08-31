@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CFSCNC.h"
-#include <Circuit.h>]
+#include <Circuit.h>
 #include "Tree.h"
 #include "RoughMachining.h"
 
@@ -8,6 +8,7 @@ namespace cnc {
 
 	Vector3d1 Helix(const Vector3d &start, const Vector3d &end, int helix_nb=48)
 	{
+		return Vector3d1();
 		double radius = 0.2;
 		auto normal = end - start;
 		double total_depth = Math::GetLength(normal);
@@ -96,6 +97,7 @@ namespace cnc {
 		length_threshold = 10.0;
 		removed_length_threshold = 5.0;
 		layer_connecting_threshold = 0.8;
+
 
 		output_debug_offset = output_debug;
 		output_rerun = re_running;
@@ -260,7 +262,6 @@ namespace cnc {
 				}
 			}
 		}
-
 		
 		if (segment_or_tool_path)
 		{
@@ -1605,6 +1606,7 @@ namespace cnc {
 
 			cfs.OutputStripNGC(pre_name + ".ngc", v);
 			Circuit::OutputStrip(pre_name + ".obj", v);
+
 
 			Circuit::OutputOffsets(path + "path\\layer_offsets_" + std::to_string(segment_index) + "_" + std::to_string(i)+".obj", cfs.offsets, "offsets");
 

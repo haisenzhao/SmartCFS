@@ -16,14 +16,15 @@ rem SmartCFS.exe ..\..\workspace\bunny\volume_1_00r1\ 2.0 0.9 1 0 0
 rem SmartCFS.exe ..\..\workspace\bunny\volume_2_001\ 2.0 0.9 1 0 0
 rem SmartCFS.exe ..\..\workspace\bunny\volume_3_010\ 2.0 0.9 1 0 0
 
+rem SmartCFS.exe ..\..\workspace\kitten\volume_1_00r1_hole\ 2.0 0.9 1 1 0
 rem SmartCFS.exe ..\..\workspace\kitten\volume_1_00r1\ 2.0 0.9 1 0 0
 rem SmartCFS.exe ..\..\workspace\kitten\volume_2_001_1\ 2.0 0.9 1 0 0
 rem SmartCFS.exe ..\..\workspace\kitten\volume_2_001_2\ 2.0 0.9 1 0 0
 
-SmartCFS.exe ..\..\workspace\biama\volume_1_00r1\ 2.0 0.9 1 0 0
-SmartCFS.exe ..\..\workspace\biama\volume_2_001\ 2.0 0.9 1 0 0
-SmartCFS.exe ..\..\workspace\biama\volume_3_r100\ 2.0 0.9 1 0 0
-SmartCFS.exe ..\..\workspace\biama\volume_4_100\ 2.0 0.9 1 0 0
+rem SmartCFS.exe ..\..\workspace\biama\volume_1_00r1\ 2.0 0.9 1 0 0
+rem SmartCFS.exe ..\..\workspace\biama\volume_2_001\ 2.0 0.9 1 0 0
+rem SmartCFS.exe ..\..\workspace\biama\volume_3_r100\ 2.0 0.9 1 0 0
+rem SmartCFS.exe ..\..\workspace\biama\volume_4_100\ 2.0 0.9 1 0 0
 
 rem SmartCFS.exe ..\..\workspace\screw\volume_1_00r1\ 2.0 0.9 1 0 0
 rem SmartCFS.exe ..\..\workspace\screw\volume_2_001_1\ 2.0 0.9 1 0 0
@@ -81,4 +82,7 @@ rem SmartCFS.exe ..\..\workspace\cage\volume_6\ 2.0 0.9 1 0 0 7
 rem SmartCFS.exe ..\..\workspace\cage\volume_7\ 2.0 0.9 1 0 0 8
 rem SmartCFS.exe ..\..\workspace\cage\volume_8\ 2.0 0.9 1 0 0 9
 rem SmartCFS.exe ..\..\workspace\cage\volume_9\ 2.0 0.9 1 0 0 10
+
+SmartCFS.exe ..\..\workspace\hanger\ 0.4 0.1 0 0 1
+
 

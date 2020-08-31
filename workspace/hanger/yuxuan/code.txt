@@ -1,0 +1,95 @@
+		struct BaseNode
+	{
+		Vector3d2 boundary;
+		int layer;
+		int index;
+		bool used;
+		std::vector<int> neighbors;
+		double plane_d;
+		BaseNode()
+		{
+			used = false;
+		};
+
+		void PushNeighbors(int node)
+		{
+			if (std::find(neighbors.begin(), neighbors.end(), node) == neighbors.end())
+			{
+				neighbors.emplace_back(node);
+			}
+		}
+	};
+	
+	auto LoadBaseNodesSequences = [](std::string path, std::vector<BaseNode> &base_nodes, std::vector<std::vector<int>> &layer_nodes, std::vector<int> &mst)
+			{
+				std::ifstream file(path, std::ios::in);
+
+				if (!file) return false;
+
+				//sequences
+				/*		int seq_nb_0;
+				file >> seq_nb_0;
+				for (int i = 0; i < seq_nb_0; i++)
+				{
+				int seq_nb_1;
+				file >> seq_nb_1;
+				std::vector<int> sequence(seq_nb_1, 0);
+				for (int j = 0; j < seq_nb_1; j++) file >> sequence[j];
+				sequences.emplace_back(sequence);
+				}*/
+
+				//mst
+				int mst_nb;
+				file >> mst_nb;
+				for (int i = 0; i < mst_nb; i++)
+				{
+					mst.emplace_back(0);
+					file >> mst.back();
+				}
+
+				//layer nodes
+				int seq_nb_0;
+				file >> seq_nb_0;
+				for (int i = 0; i < seq_nb_0; i++)
+				{
+					int seq_nb_1;
+					file >> seq_nb_1;
+					std::vector<int> sequence(seq_nb_1, 0);
+					for (int j = 0; j < seq_nb_1; j++) file >> sequence[j];
+					layer_nodes.emplace_back(sequence);
+				}
+
+				//BaseNodes
+				int node_nb;
+				file >> node_nb;
+				for (int i = 0; i < node_nb; i++)
+				{
+					BaseNode node;
+					file >> node.layer >> node.index >> node.used >> node.plane_d;
+
+					int neighbor_nb;
+					file >> neighbor_nb;
+					node.neighbors = std::vector<int>(neighbor_nb, -1);
+					for (int j = 0; j < neighbor_nb; j++)file >> node.neighbors[j];
+
+					int boundary_nb_0 = 0;
+					file >> boundary_nb_0;
+					for (int j = 0; j < boundary_nb_0; j++)
+					{
+						int boundary_nb_1 = 0;
+						file >> boundary_nb_1;
+						Vector3d1 vec(boundary_nb_1, Vector3d(0.0, 0.0, 0.0));
+						for (int k = 0; k < boundary_nb_1; k++)
+							file >> vec[k][0] >> vec[k][1] >> vec[k][2];
+						node.boundary.emplace_back(vec);
+					}
+					base_nodes.emplace_back(node);
+				}
+
+				file.clear();
+				file.close();
+
+
+
+				return true;
+			};

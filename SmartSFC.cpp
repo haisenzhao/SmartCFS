@@ -5,6 +5,7 @@
 #include "iostream"
 #include "CFSCNC.h"
 #include "RoughMachining.h"
+#include "AM.h"
 
 using namespace cnc;
 
@@ -85,7 +86,8 @@ int main(int argc, char* argv[])
 		bool segment_or_tool_path = stod(std::string(argv[6]));
 
 		DWORD start_time = GetTickCount();
-		RoughMachining rm(path, re_running, output_debug, toolpath_size, layer_thickness, segment_or_tool_path);
+		//RoughMachining rm(path, re_running, output_debug, toolpath_size, layer_thickness, segment_or_tool_path);
+		AMVolume am(path, re_running, output_debug, toolpath_size, layer_thickness, segment_or_tool_path);
 		DWORD end_time = GetTickCount();
 		std::cout << "[TIME] tool path generation times " << (end_time - start_time) / 1000.0 << std::endl;
 

@@ -897,9 +897,9 @@ namespace cnc {
 				auto s = offsets[j];
 				auto e = offsets[(j + 1) % offsets.size()];
 				if (name_b)
-					CGAL_Export_Path_Segment(debug_file, debug_index, "name", 1.0, 0.0, 0.0, s, e, 0.2);
+					CGAL_Export_Path_Segment(debug_file, debug_index, "name", 1.0, 0.0, 0.0, s, e, 0.05);
 				else
-					CGAL_Export_Path_Segment(debug_file, debug_index, "name_" + IntString(j), 1.0, 0.0, 0.0, s, e, 0.2);
+					CGAL_Export_Path_Segment(debug_file, debug_index, "name_" + IntString(j), 1.0, 0.0, 0.0, s, e, 0.05);
 			}
 
 			debug_file.clear();

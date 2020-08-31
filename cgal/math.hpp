@@ -269,14 +269,19 @@ namespace Math {
 		output_c_2 = v[2];
 	}
 
-	inline void ClearFolder(const std::string &path)
+	inline void ClearFolder(const std::string& path)
 	{
-		if (_access(path.c_str(), 0) == -1)	_mkdir(path.c_str());
-		//clear folders
-		std::string cmd = "del " + path + ". / s / q";
-		system(cmd.c_str());
-		//system("cls");
-	};
+		if (_access(path.c_str(), 0) == -1)
+		{
+			_mkdir(path.c_str());
+		}
+		else
+		{
+			std::string cmd = "rmdir " + path + ". / s / q";
+			system(cmd.c_str());
+			_mkdir(path.c_str());
+		}
+	}
 }
 #endif 
 

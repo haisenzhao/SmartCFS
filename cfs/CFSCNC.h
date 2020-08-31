@@ -282,6 +282,7 @@ namespace cnc {
 
 
 		void OutputStripNGC(const std::string path, const Vector3d1 &offsets, bool name_b = true);
+		void OutputStrip(const std::string path, const Vector3d1 &offsets, bool name_b = true);
 
 
 

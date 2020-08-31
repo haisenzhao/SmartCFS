@@ -314,7 +314,21 @@ namespace cnc {
 
 	
 
+	void CFSCNC::OutputStrip(const std::string path, const Vector3d1 &offsets, bool name_b)
+	{
 
+		std::ofstream debug_file(path);
+
+		for (int j = 0; j < offsets.size(); j++)
+		{
+			auto s = offsets[j];
+			debug_file <<std::to_string(s[0]) + " " + std::to_string(s[1]) + " " + std::to_string(s[2]) << std::endl;
+		}
+
+
+		debug_file.clear();
+		debug_file.close();
+	}
 
 
 	void CFSCNC::OutputStripNGC(const std::string path, const Vector3d1 &offsets, bool name_b)
