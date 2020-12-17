@@ -162,7 +162,7 @@ namespace cnc {
 
 		for (int layer = 0; layer < layer_nodes.size(); layer++)
 		{
-			if (layer<=841)continue;
+			//if (layer<=841)continue;
 
 			for (int layer_node = 0; layer_node < layer_nodes[layer].size(); layer_node++)
 			{

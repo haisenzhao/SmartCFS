@@ -83,6 +83,10 @@ rem SmartCFS.exe ..\..\workspace\cage\volume_7\ 2.0 0.9 1 0 0 8
 rem SmartCFS.exe ..\..\workspace\cage\volume_8\ 2.0 0.9 1 0 0 9
 rem SmartCFS.exe ..\..\workspace\cage\volume_9\ 2.0 0.9 1 0 0 10
 
-SmartCFS.exe ..\..\workspace\hanger\ 0.4 0.1 0 0 1
+SmartCFS.exe ..\..\workspace\yuxuan\hanger\ 0.4 0.2 1 1 0
+rem SmartCFS.exe ..\..\workspace\yuxuan\eyepiece\ 0.4 0.2 1 1 0
+rem SmartCFS.exe ..\..\workspace\yuxuan\spring\ 0.4 0.2 1 1 0
+
+
 
 
