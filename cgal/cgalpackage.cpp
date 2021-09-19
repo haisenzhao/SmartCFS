@@ -947,7 +947,6 @@ void CGAL_2D_Polygon_Dart_Sampling(Vector2d1 &py, double d, Vector2d1 &sampling_
 
 }
 
-//
 //void CGAL_2D_Polygon_Inside_Point(std::vector<double> &py_x, std::vector<double> &py_y, double &inside_x, double &inside_y)
 //{
 
