@@ -49,6 +49,8 @@ set(CFS_SOURCES
 	cfs/Tree.h
 	cfs/Vector2D.cpp
 	cfs/Vector2D.hpp
+	cfs/AM.cpp
+	cfs/AM.h
 )
 
 SOURCE_GROUP("cfs" FILES ${CFS_SOURCES})
