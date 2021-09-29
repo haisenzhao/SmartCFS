@@ -28,7 +28,17 @@ set(CGAL_SOURCES
 	cgal/NewtonApple_hull3D.h
 )
 
+set(PYMESH_SOURCES
+	pymesh/Exception.h
+	pymesh/MshLoader.cpp
+	pymesh/MshLoader.h
+	pymesh/MshSaver.cpp
+	pymesh/MshSaver.h
+)
+
 SOURCE_GROUP("cgal" FILES ${CGAL_SOURCES})
+
+SOURCE_GROUP("pymesh" FILES ${PYMESH_SOURCES})
 
 
 set(CFS_SOURCES
@@ -57,15 +67,16 @@ SOURCE_GROUP("cfs" FILES ${CFS_SOURCES})
 
 
 # Add an executable with the above sources
-add_executable(SmartCFS ${SOURCES} ${CGAL_SOURCES} ${CFS_SOURCES})
+add_executable(SmartCFS ${SOURCES} ${CGAL_SOURCES} ${PYMESH_SOURCES} ${CFS_SOURCES})
 
 set(CFS_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/cfs)
 set(CGAL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/cgal)
+set(PYMESH_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/pymesh)
 set(ThirdPartyLibs_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/include)
 
 
 #MESSAGE(STATUS ${CGAL_INCLUDE_DIR} " found")
-include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${CFS_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR})
 
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-4.7.lib)
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-gd-4.7.lib)
