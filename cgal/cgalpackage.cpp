@@ -1,66 +1,19 @@
 ﻿#include "stdafx.h"
 #include "cgalpackage.h"
 
-
 #include "NewtonApple_hull3D.h"
 #include "Wm5MeshCurvature.h"
 #include "Wm5IntrRay3Sphere3.h"
 #include "Wm5BSplineCurveFit.h"
-
 #include "Wm5ContBox2.h"
 #include "Wm5Box2.h"
 #include "Wm5Matrix2.h"
-
 #include "clipper.hpp"
 #include "kdtree.h"
 
 
-// A modifier creating a triangle with the incremental builder.
-template<class HDS>
-class polyhedron_builder : public CGAL::Modifier_base<HDS> {
-public:
 
-	std::vector<double> coords;
-	std::vector<int>    tris;
-
-	polyhedron_builder(std::vector<double>& c, std::vector<int>& t){
-		coords = c;
-		tris = t;
-	}
-
-	void operator()(HDS& hds) {
-		typedef typename HDS::Vertex   Vertex;
-		typedef typename Vertex::Point Point;
-
-		// create a cgal incremental builder
-		CGAL::Polyhedron_incremental_builder_3<HDS> B(hds, true);
-		B.begin_surface(coords.size() / 3, tris.size() / 3);
-		//B.begin_surface(3, 1, 6);
-
-		// add the polyhedron vertices
-		for (int i = 0; i<(int)coords.size(); i += 3){
-			B.add_vertex(Point(coords[i + 0], coords[i + 1], coords[i + 2]));
-		}
-
-		// add the polyhedron triangles
-		for (int i = 0; i<(int)tris.size(); i += 3){
-			B.begin_facet();
-			B.add_vertex_to_facet(tris[i + 0]);
-			B.add_vertex_to_facet(tris[i + 1]);
-			B.add_vertex_to_facet(tris[i + 2]);
-			B.end_facet();
-		}
-		//finish up the surface
-		//B.end_surface();
-	}
-};
-
-
-void
-mark_domains(CDT& ct,
-CDT::Face_handle start,
-int index,
-std::list<CDT::Edge>& border)
+void mark_domains(CDT& ct, CDT::Face_handle start, int index, std::list<CDT::Edge>& border)
 {
 	if (start->info().nesting_level != -1){
 		return;
@@ -89,8 +42,7 @@ std::list<CDT::Edge>& border)
 //level of 0. Then we recursively consider the non-explored facets incident 
 //to constrained edges bounding the former set and increase the nesting level by 1.
 //Facets in the domain are those with an odd nesting level.
-void
-mark_domains(CDT& cdt)
+void mark_domains(CDT& cdt)
 {
 	for (CDT::All_faces_iterator it = cdt.all_faces_begin(); it != cdt.all_faces_end(); ++it){
 		it->info().nesting_level = -1;

@@ -29,10 +29,6 @@ typedef std::vector<std::vector<std::vector<Vector3d>>> Vector3d3;
 typedef glm::highp_ivec2 Vector2i;
 typedef glm::highp_ivec3 Vector3i;
 
-
-
-
-
 template <typename datum>
 using Vector1 = std::vector<datum>;
 
@@ -84,11 +80,6 @@ typedef std::vector<std::vector<std::pair<int, int>>> VectorPI2;
 
 typedef std::tuple<int, int, int> TI3;
 typedef std::vector<std::tuple<int, int, int>> VectorTI3;
-
-
-
-
-
 
 
 

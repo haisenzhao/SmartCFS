@@ -14,7 +14,6 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
-
 #include <string>
 #include <algorithm>
 #include <list>
@@ -23,7 +22,6 @@
 
 
 #include <CGAL/subdivision_method_3.h>
-
 #include<CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include<CGAL/Polygon_with_holes_2.h>
 #include<CGAL/create_offset_polygons_from_polygon_with_holes_2.h>
@@ -37,14 +35,11 @@
 #include<CGAL/create_straight_skeleton_from_polygon_with_holes_2.h>
 #include <CGAL/Segment_Delaunay_graph_2.h>
 #include <CGAL/Segment_Delaunay_graph_filtered_traits_2.h>
-
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Triangulation_2.h>
-
 #include <CGAL/Polyhedron_incremental_builder_3.h>
-
 #include <CGAL/Surface_mesh.h>
 #include <CGAL/boost/graph/graph_traits_Surface_mesh.h>
 #include <CGAL/AABB_halfedge_graph_segment_primitive.h>
@@ -54,7 +49,6 @@
 #include <CGAL/Polygon_mesh_slicer.h>
 #include <CGAL/mesh_segmentation.h>
 #include <CGAL/property_map.h>
-
 #include <cstdlib>
 #include <iterator>
 #include <CGAL/Random.h>
@@ -233,6 +227,54 @@ struct EndEdge
 		end.y = end_y;
 	}
 };
+
+// A modifier creating a triangle with the incremental builder.
+template<class HDS>
+class polyhedron_builder : public CGAL::Modifier_base<HDS> {
+public:
+
+	std::vector<double> coords;
+	std::vector<int>    tris;
+
+	polyhedron_builder(std::vector<double>& c, std::vector<int>& t){
+		coords = c;
+		tris = t;
+	}
+
+	void operator()(HDS& hds) {
+		typedef typename HDS::Vertex   Vertex;
+		typedef typename Vertex::Point Point;
+
+		// create a cgal incremental builder
+		CGAL::Polyhedron_incremental_builder_3<HDS> B(hds, true);
+		B.begin_surface(coords.size() / 3, tris.size() / 3);
+		//B.begin_surface(3, 1, 6);
+
+		// add the polyhedron vertices
+		for (int i = 0; i<(int)coords.size(); i += 3){
+			B.add_vertex(Point(coords[i + 0], coords[i + 1], coords[i + 2]));
+		}
+
+		// add the polyhedron triangles
+		for (int i = 0; i<(int)tris.size(); i += 3){
+			B.begin_facet();
+			B.add_vertex_to_facet(tris[i + 0]);
+			B.add_vertex_to_facet(tris[i + 1]);
+			B.add_vertex_to_facet(tris[i + 2]);
+			B.end_facet();
+		}
+		//finish up the surface
+		//B.end_surface();
+	}
+};
+
+void mark_domains(CDT& ct, CDT::Face_handle start, int index, std::list<CDT::Edge>& border);
+void mark_domains(CDT& cdt);
+Point_2 point_to_2d(const Point_3& p, Plane_3& pl);
+Point_3 point_to_3d(const Point_2& p, Plane_3& pl);
+void  Construct_Polyhedron(Polyhedron_3 &polyhedron, Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2);
+void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path);
+void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path, Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2);
 
 //many kinds of distance computing in 2D
 /***************************************************************************************************/
