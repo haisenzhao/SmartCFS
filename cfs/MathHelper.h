@@ -866,8 +866,6 @@ namespace hpcg {
 
 	inline void ColorMapping(double isolevel, double &output_c_0, double &output_c_1, double &output_c_2)
 	{
-
-
 		Vector3d v;
 		if (isolevel >= 0 && isolevel <= 0.25)
 		{
@@ -922,7 +920,6 @@ namespace hpcg {
 			if (vecs[i][0] == element[0] && vecs[i][1] == element[1]) return i;
 			if (vecs[i][0] == element[1] && vecs[i][1] == element[0]) return i;
 		}
-
 		return -1;
 	}
 

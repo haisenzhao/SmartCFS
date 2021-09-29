@@ -1,4 +1,5 @@
-#pragma once
+#ifndef cgal_hpp
+#define cgal_hpp
 
 #include "stdafx.h"
 
@@ -388,3 +389,5 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 
 void CGAL_3D_Mesh_Gradient(Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2, std::vector<double> &psd,
 	Vector3d1 &vecs_gradients, Vector3d1 &faces_gradients);
+
+#endif
