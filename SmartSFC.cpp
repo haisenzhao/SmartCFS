@@ -18,12 +18,11 @@ void mold()
 	std::string input_surf_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input__sf.obj");
 	std::string input_surf_off_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input__sf.off");
 
-
 	auto inter = CGAL_3D_Intersection_Ray_Mesh(Vector3d(0.0, 0.0, 0.0), Vector3d(1.0, 0.0, 0.0), input_surf_off_file);
 	std::cerr << "Inter: " << inter << std::endl;
 
-	//Polyhedron_3 polyhedron;
-	//Construct_Polyhedron(polyhedron, input_surf_off_file);
+	Polyhedron_3 polyhedron;
+	Construct_Polyhedron(polyhedron, input_surf_off_file);
 
 	//Tree tree(faces(polyhedron).first, faces(polyhedron).second, polyhedron);
 	//tree.accelerate_distance_queries();
