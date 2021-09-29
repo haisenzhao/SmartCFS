@@ -335,6 +335,18 @@ namespace Math {
 			_mkdir(path.c_str());
 		}
 	}
+
+	static void MAssert(std::string& str)
+	{
+		std::cerr << str << std::endl;
+		system("pause");
+	}
+
+	static void MAssert(char* str)
+	{
+		std::cerr << str << std::endl;
+		system("pause");
+	}
 }
 #endif 
 
