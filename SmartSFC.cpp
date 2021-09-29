@@ -70,17 +70,32 @@ void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input
 	};
 
 	//uniform ray directions
+	//control distance between points???
+	//control percentage ????
 	auto Random_Directions = [](const int& dns)
 	{
+		if (dns <= 0) MAssert("if (dns <= 0)");//check validation of dns
+
+		double gaussion_sphere_radius = 1.0;
+		double idea_distance = 4 * gaussion_sphere_radius / sqrt(dns);
+
+		int dis_iters = 100;
 		Vector3d1 directions;
 		for (int i = 0; i < dns; i++)
 		{
-			double alpha_angle = rand() / double(RAND_MAX) *2.0* Math_PI;
-			double alpha_beta = rand() / double(RAND_MAX) *2.0* Math_PI;
-			auto direction_0 = Math::RotationAxis(Vector3d(1.0, 0.0, 0.0), alpha_angle, Vector3d(0.0, 1.0, 0.0));
-			auto direction_axis = Math::GetCrossproduct(direction_0, Vector3d(0.0, 1.0, 0.0));
-			auto direction_1 = Math::RotationAxis(direction_0, alpha_beta, direction_axis);
-			directions.push_back(direction_1);
+			for (int j = 0; j < dis_iters; j++)
+			{
+				double alpha_angle = rand() / double(RAND_MAX) *2.0* Math_PI;
+				double alpha_beta = rand() / double(RAND_MAX) *2.0* Math_PI;
+				auto direction_0 = Math::RotationAxis(Vector3d(gaussion_sphere_radius, 0.0, 0.0), alpha_angle, Vector3d(0.0, 1.0, 0.0));
+				auto direction_axis = Math::GetCrossproduct(direction_0, Vector3d(0.0, 1.0, 0.0));
+				auto direction_1 = Math::RotationAxis(direction_0, alpha_beta, direction_axis);
+
+
+
+				directions.push_back(direction_1);
+			}
+
 		}
 		return directions;
 		//Vector3d RotationAxis(Vector3d p, double angle, Vector3d n)
