@@ -30,6 +30,68 @@ typedef glm::highp_ivec2 Vector2i;
 typedef glm::highp_ivec3 Vector3i;
 
 
+
+
+
+template <typename datum>
+using Vector1 = std::vector<datum>;
+
+template <typename datum>
+using Vector2 = std::vector<std::vector<datum>>;
+
+template <typename datum>
+using Vector3 = std::vector<std::vector<std::vector<datum>>>;
+
+//typedef glm::highp_dvec2 Vector2d;
+//typedef std::vector<Vector2d> Vector2d1;
+//typedef std::vector<std::vector<Vector2d>> Vector2d2;
+//typedef std::vector<std::vector<std::vector<Vector2d>>> Vector2d3;
+
+//typedef glm::highp_dvec3 Vector3d;
+//typedef std::vector<Vector3d> Vector3d1;
+//typedef std::vector<std::vector<Vector3d>> Vector3d2;
+//typedef std::vector<std::vector<std::vector<Vector3d>>> Vector3d3;
+
+typedef std::vector<bool> Vector1b1;
+typedef std::vector<std::vector<bool>> Vector1b2;
+typedef std::vector<std::vector<std::vector<bool>>> Vector1b3;
+
+typedef std::vector<int> Vector1i1;
+typedef std::vector<std::vector<int>> Vector1i2;
+typedef std::vector<std::vector<std::vector<int>>> Vector1i3;
+
+typedef std::vector<double> Vector1d1;
+typedef std::vector<std::vector<double>> Vector1d2;
+typedef std::vector<std::vector<std::vector<double>>> Vector1d3;
+
+typedef std::vector<std::string> VectorStr1;
+typedef std::vector<std::vector<std::string>> VectorStr2;
+typedef std::vector<std::vector<std::vector<std::string>>> VectorStr3;
+
+//typedef glm::highp_ivec2 Vector2i;
+//typedef glm::highp_ivec3 Vector3i;
+
+typedef std::vector<Vector2i> Vector2i1;
+typedef std::vector<std::vector<Vector2i>> Vector2i2;
+typedef std::vector<std::vector<std::vector<Vector2i>>> Vector2i3;
+
+typedef std::vector<Vector3i> Vector3i1;
+typedef std::vector<std::vector<Vector3i>> Vector3i2;
+typedef std::vector<std::vector<std::vector<Vector3i>>> Vector3i3;
+
+typedef std::vector<std::pair<int, int>> VectorPI1;
+typedef std::vector<std::vector<std::pair<int, int>>> VectorPI2;
+
+typedef std::tuple<int, int, int> TI3;
+typedef std::vector<std::tuple<int, int, int>> VectorTI3;
+
+
+
+
+
+
+
+
 namespace Math {
 
 	static const double DOUBLE_EPSILON = 1.0E-05;

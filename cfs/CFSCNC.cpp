@@ -23,7 +23,7 @@ typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef K::Point_3                    Point_3;
 typedef K::Ray_3                      Ray_3;
 typedef K::Vector_3                   Vector_3;
-typedef K::Triangle_3				  Triangle_3;
+//typedef K::Triangle_3				  Triangle_3;
 
 typedef CGAL::Polyhedron_3<K, CGAL::Polyhedron_items_with_id_3> Polyhedron_3;
 typedef CGAL::AABB_face_graph_triangle_primitive<Polyhedron_3> Primitive;
