@@ -14,8 +14,6 @@ using namespace cnc;
 void mold()
 {
 	Polyhedron_3 polyhedron;
-
-	Polyhedron_3 polyhedron;
 	Construct_Polyhedron(polyhedron, path);
 
 	//Tree tree(faces(polyhedron).first, faces(polyhedron).second, polyhedron);
