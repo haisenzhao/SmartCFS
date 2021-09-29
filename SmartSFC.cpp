@@ -20,6 +20,9 @@ void mold()
 	std::string input_tet_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input_.msh");
 	std::string input_surf_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input__sf.obj");
 
+	Polyhedron_3 polyhedron;
+	//Construct_Polyhedron(polyhedron, path);
+
 	Vector3d1 surf_vecs;
 	Vector1i2 surf_faces(3, Vector1i1());
 
