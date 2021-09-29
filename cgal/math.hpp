@@ -161,8 +161,6 @@ namespace Math {
 		return vecs_3d;
 	}
 	
-
-
 	inline Vector3d RotationAxis(Vector3d p, double angle, Vector3d n)
 	{
 		glm::mat4 inputMatrix(0.0);

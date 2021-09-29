@@ -62,9 +62,28 @@ void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input
 		return center;
 	};
 
-	auto Ray_Intersection = []()
+	//ray intersection
+	auto Ray_Intersection = [](const Tree&tree, const Vector3d& origin, const Vector3d& target)
 	{
+		Ray_3 ray(Point_3(origin[0], origin[1], origin[2]), Vector_3(target[0], target[1], target[1]));
+		return  tree.do_intersect(ray);
+	};
 
+	//uniform ray directions
+	auto Random_Directions = [](const int& dns)
+	{
+		Vector3d1 directions;
+		for (int i = 0; i < dns; i++)
+		{
+			double alpha_angle = rand() / double(RAND_MAX) *2.0* Math_PI;
+			double alpha_beta = rand() / double(RAND_MAX) *2.0* Math_PI;
+			auto direction_0 = Math::RotationAxis(Vector3d(1.0, 0.0, 0.0), alpha_angle, Vector3d(0.0, 1.0, 0.0));
+			auto direction_axis = Math::GetCrossproduct(direction_0, Vector3d(0.0, 1.0, 0.0));
+			auto direction_1 = Math::RotationAxis(direction_0, alpha_beta, direction_axis);
+			directions.push_back(direction_1);
+		}
+		return directions;
+		//Vector3d RotationAxis(Vector3d p, double angle, Vector3d n)
 	};
 
 #pragma endregion
@@ -80,16 +99,28 @@ void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input
 	Tree tree(faces(polyhedron).first, faces(polyhedron).second, polyhedron);
 	tree.accelerate_distance_queries();
 	
-	//Ray_3 ray(Point_3(0.0, 0.0, 0.0), Vector_3(1.0, 0.0, 0.0));
-	//auto inter = tree.do_intersect(ray);
-	//std::cerr << "Inter: " << inter << std::endl;
-
 	//accessibility analysis for each tet element
 	for (int i = 0; i < tet_number; i++)
 	{
 		Vector3d center = Get_Tet_Center(tet, i);
-
 	}
+
+	//test direction generations
+	auto directions = Random_Directions(100);
+
+	std::ofstream file("E:\\Dropbox\\Task1\\postdoc\\IST\\Desktop\\temp.obj");
+	int export_index = 1;
+	for (int i = 0; i < directions.size(); i++)
+	{
+		CGAL_Export_Path_Point(file, export_index, "", 0.5, 0.5, 0.5, directions[i],0.05);
+	}
+
+	file.clear();
+	file.close();
+
+	//void CGAL_Export_Path_Point(std::ofstream &export_file_output, int &export_index,
+	//	std::string s_name, double r, double g, double b, Vector3d point, double radius);
+
 };
 
 void mold()
