@@ -13,20 +13,24 @@ using namespace cnc;
 
 void mold()
 {
-	Polyhedron_3 polyhedron;
-	Construct_Polyhedron(polyhedron, path);
+	//ray intersection
+	std::string input_tet_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input_.msh");
+	std::string input_surf_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input__sf.obj");
+	std::string input_surf_off_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input__sf.off");
+
+
+	auto inter = CGAL_3D_Intersection_Ray_Mesh(Vector3d(0.0, 0.0, 0.0), Vector3d(1.0, 0.0, 0.0), input_surf_off_file);
+	std::cerr << "Inter: " << inter << std::endl;
+
+	//Polyhedron_3 polyhedron;
+	//Construct_Polyhedron(polyhedron, input_surf_off_file);
 
 	//Tree tree(faces(polyhedron).first, faces(polyhedron).second, polyhedron);
 	//tree.accelerate_distance_queries();
-	//Ray_3 ray(Point_3(p[0], p[1], p[2]), Vector_3(n[0], n[1], n[2]));
-	//if (tree.do_intersect(ray))
-	//	return true;
-	//else
-	//	return false;
+	//Ray_3 ray(Point_3(0.0,0.0,0.0), Vector_3(1.0,0.0,0.0));
+	//auto inter = tree.do_intersect(ray);
 
 
-	std::string input_tet_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input_.msh");
-	std::string input_surf_file("E:\\Dropbox\\Mold\\TetWild\\fig19\\input__sf.obj");
 
 	Vector3d1 surf_vecs;
 	Vector1i2 surf_faces(3, Vector1i1());

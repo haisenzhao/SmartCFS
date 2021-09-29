@@ -18,8 +18,6 @@
 #include <algorithm>
 #include <list>
 
-#include "math.hpp"
-
 
 #include <CGAL/subdivision_method_3.h>
 #include<CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -64,217 +62,18 @@
 #include <CGAL/Side_of_triangle_mesh.h>
 #include <CGAL/Polygon_set_2.h>
 
+#include "math.hpp"
+
 typedef CGAL::Simple_cartesian<double> KC;
 typedef CGAL::Segment_Delaunay_graph_filtered_traits_without_intersections_2<KC> Gt;
 typedef CGAL::Segment_Delaunay_graph_2<Gt>  SDG2;
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
-typedef K::FT FT;
-typedef K::Point_2                    Point_2;
-typedef K::Line_2                     Line_2;
-typedef K::Segment_2                  Segment_2;
-typedef K::Ray_2                      Ray_2;
-typedef CGAL::Polygon_2<K>            Polygon_2;
-typedef K::Point_3                    Point_3;
-typedef K::Line_3                     Line_3;
-typedef K::Segment_3                  Segment_3;
-typedef K::Ray_3                      Ray_3;
-typedef K::Plane_3					  Plane_3;
-typedef K::Vector_3                   Vector_3;
-typedef K::Sphere_3                   Sphere_3;
-typedef CGAL::Polygon_set_2<K, std::vector<K::Point_2>> Polygon_set_2;
-
-bool DebugInformation()
-{
-	return true;
-}
-
-struct FaceInfo2
-{
-	FaceInfo2(){}
-	int nesting_level;
-	bool in_domain(){
-		return nesting_level % 2 == 1;
-	}
-};
-
-Vector3d PointVector3d(Point_3 p)
-{
-	return Vector3d(p[0], p[1], p[2]);
-}
-Point_3 VectorPoint3d(Vector3d p)
-{
-	return Point_3(p[0], p[1], p[2]);
-}
-
-Vector2d PointVector2d(Point_2 p)
-{
-	return Vector2d(p[0], p[1]);
-}
-Point_2 VectorPoint2d(Vector2d p)
-{
-	return Point_2(p[0], p[1]);
-}
 
 
-// ----------------------- A CGAL::Vertex with decoration ------------------
-template < class Gt, class Vb = CGAL::Triangulation_vertex_base_2<Gt> >
-class Vertex : public  Vb {
-	typedef Vb superclass;
-public:
-	typedef typename Vb::Vertex_handle      Vertex_handle;
-	typedef typename Vb::Point              Point;
-
-	template < typename TDS2 >
-	struct Rebind_TDS {
-		typedef typename Vb::template Rebind_TDS<TDS2>::Other Vb2;
-		typedef Vertex<Gt, Vb2> Other;
-	};
-
-public:
-	Vertex() : superclass() {}
-	Vertex(const Point & p) : superclass(p) {}
-	int index;
-};
-
-typedef CGAL::Triangulation_2<K>         Triangulation;
-typedef Vertex<K>                      Vb;
-typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
-typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
-typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
-typedef CGAL::Exact_predicates_tag                                Itag;
-typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag>  CDT;
 
 
-//typedef CDT::Point                                                Point;
-//typedef CGAL::Polygon_2<K>                                        Polygon_2;
-
-typedef CGAL::Polyhedron_3<K, CGAL::Polyhedron_items_with_id_3> Polyhedron_3;
-typedef Polyhedron_3::Facet_iterator Poly_facet_iterator;
-typedef Polyhedron_3::Point_3 Poly_point_3;
-typedef Polyhedron_3::HalfedgeDS Poly_halfedgeds_3;
-typedef Polyhedron_3::Halfedge_handle Halfedge_handle;
-typedef Polyhedron_3::Vertex_handle Vertex_handle;
-typedef Polyhedron_3::Halfedge_around_vertex_const_circulator  HV_circulator;
-
-typedef CGAL::Surface_mesh_shortest_path_traits<K, Polyhedron_3> Traits;
-typedef CGAL::Surface_mesh_shortest_path<Traits> Surface_mesh_shortest_path;
-typedef boost::graph_traits<Polyhedron_3> Graph_traits;
-typedef Graph_traits::vertex_iterator vertex_iterator;
-typedef Graph_traits::face_iterator face_iterator;
-
-typedef CGAL::Surface_mesh<K::Point_3> Mesh;
-typedef std::vector<K::Point_3> Polyline_type;
-typedef std::list< Polyline_type > Polylines;
-typedef CGAL::AABB_halfedge_graph_segment_primitive<Mesh> HGSP;
-typedef CGAL::AABB_traits<K, HGSP>    AABB_traits;
-typedef CGAL::AABB_tree<AABB_traits>  AABB_tree;
-
-
-typedef CGAL::AABB_face_graph_triangle_primitive<Polyhedron_3> Primitive;
-typedef CGAL::AABB_traits<K, Primitive> Traits_poly;
-typedef CGAL::AABB_tree<Traits_poly> Tree;
-typedef Tree::Point_and_primitive_id Point_and_primitive_id;
-typedef boost::optional< Tree::Intersection_and_primitive_id<Ray_3>::Type> Ray_intersection;
-
-typedef CGAL::AABB_face_graph_triangle_primitive<Mesh> Mesh_Primitive;
-typedef CGAL::AABB_traits<K, Mesh_Primitive> Mesh_Traits;
-typedef CGAL::AABB_tree<Mesh_Traits> Mesh_Tree;
-typedef boost::optional<Mesh_Tree::Intersection_and_primitive_id<Ray_3>::Type> Mesh_Ray_intersection;
-
-
-typedef KC::Triangle_3 Triangle_3;
-typedef std::list<Triangle_3>::iterator Iterator_3;
-typedef CGAL::AABB_triangle_primitive<KC, Iterator_3> Primitive_3;
-typedef CGAL::AABB_traits<KC, Primitive_3> AABB_triangle_traits_3;
-typedef CGAL::AABB_tree<AABB_triangle_traits_3> Tree_3;
-
-
-struct Index
-{
-	int x;
-	int y;
-	Index(){}
-	Index(int x0, int y0)
-	{
-		x = x0;
-		y = y0;
-	}
-};
-
-struct Edge
-{
-	int source;
-	int end;
-	Edge(){}
-	Edge(int s, int e)
-	{
-		source = s;
-		end = e;
-	}
-};
-
-struct EndEdge
-{
-	Index source;
-	Index end;
-	EndEdge(int source_x, int source_y, int end_x, int end_y)
-	{
-		source.x = source_x;
-		source.y = source_y;
-		end.x = end_x;
-		end.y = end_y;
-	}
-};
-
-// A modifier creating a triangle with the incremental builder.
-template<class HDS>
-class polyhedron_builder : public CGAL::Modifier_base<HDS> {
-public:
-
-	std::vector<double> coords;
-	std::vector<int>    tris;
-
-	polyhedron_builder(std::vector<double>& c, std::vector<int>& t){
-		coords = c;
-		tris = t;
-	}
-
-	void operator()(HDS& hds) {
-		typedef typename HDS::Vertex   Vertex;
-		typedef typename Vertex::Point Point;
-
-		// create a cgal incremental builder
-		CGAL::Polyhedron_incremental_builder_3<HDS> B(hds, true);
-		B.begin_surface(coords.size() / 3, tris.size() / 3);
-		//B.begin_surface(3, 1, 6);
-
-		// add the polyhedron vertices
-		for (int i = 0; i<(int)coords.size(); i += 3){
-			B.add_vertex(Point(coords[i + 0], coords[i + 1], coords[i + 2]));
-		}
-
-		// add the polyhedron triangles
-		for (int i = 0; i<(int)tris.size(); i += 3){
-			B.begin_facet();
-			B.add_vertex_to_facet(tris[i + 0]);
-			B.add_vertex_to_facet(tris[i + 1]);
-			B.add_vertex_to_facet(tris[i + 2]);
-			B.end_facet();
-		}
-		//finish up the surface
-		//B.end_surface();
-	}
-};
-
-void mark_domains(CDT& ct, CDT::Face_handle start, int index, std::list<CDT::Edge>& border);
-void mark_domains(CDT& cdt);
-Point_2 point_to_2d(const Point_3& p, Plane_3& pl);
-Point_3 point_to_3d(const Point_2& p, Plane_3& pl);
-void  Construct_Polyhedron(Polyhedron_3 &polyhedron, Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2);
-void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path);
-void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path, Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2);
 
 //many kinds of distance computing in 2D
 /***************************************************************************************************/
