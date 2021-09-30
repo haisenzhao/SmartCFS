@@ -11,7 +11,8 @@
 
 using namespace PyMesh;
 using namespace cnc;
-using namespace Math;
+//using namespace PGL;
+
 
 //microstructure accessibility analysis
 void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input_surf_file)
@@ -37,7 +38,7 @@ void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input
 			{
 				auto index = ml.m_elements[i * 4 + j];
 				if (!(index >= 0 && index < vec_number))
-					MAssert("if (!(index >= 0 && index < vec_number))");
+					PGL::Functs::MAssert("if (!(index >= 0 && index < vec_number))");
 			}
 		}
 		std::cerr << std::endl;
@@ -75,7 +76,7 @@ void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input
 	//control percentage ????
 	auto Random_Directions = [](const int& dns)
 	{
-		if (dns <= 0) MAssert("if (dns <= 0)");//check validation of dns
+		//if (dns <= 0) MAssert("if (dns <= 0)");//check validation of dns
 
 		double gaussion_sphere_radius = 1.0;
 		double idea_distance = 4 * gaussion_sphere_radius / sqrt(dns);
@@ -86,11 +87,11 @@ void MoldAccessibilityAnalysis(const string& input_tet_file, const string& input
 		{
 			for (int j = 0; j < dis_iters; j++)
 			{
-				double alpha_angle = rand() / double(RAND_MAX) *2.0* Math_PI;
-				double alpha_beta = rand() / double(RAND_MAX) *2.0* Math_PI;
-				auto direction_0 = Math::RotationAxis(Vector3d(gaussion_sphere_radius, 0.0, 0.0), alpha_angle, Vector3d(0.0, 1.0, 0.0));
-				auto direction_axis = Math::GetCrossproduct(direction_0, Vector3d(0.0, 1.0, 0.0));
-				auto direction_1 = Math::RotationAxis(direction_0, alpha_beta, direction_axis);
+				double alpha_angle = rand() / double(RAND_MAX) *2.0* PGL::Math_PI;
+				double alpha_beta = rand() / double(RAND_MAX) *2.0* PGL::Math_PI;
+				auto direction_0 = PGL::Functs::RotationAxis(Vector3d(gaussion_sphere_radius, 0.0, 0.0), alpha_angle, Vector3d(0.0, 1.0, 0.0));
+				auto direction_axis = PGL::Functs::GetCrossproduct(direction_0, Vector3d(0.0, 1.0, 0.0));
+				auto direction_1 = PGL::Functs::RotationAxis(direction_0, alpha_beta, direction_axis);
 
 
 

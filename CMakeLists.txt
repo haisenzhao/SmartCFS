@@ -74,8 +74,24 @@ set(PYMESH_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/pymesh)
 set(ThirdPartyLibs_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/include)
 
 
+
+include(ExternalProject)
+ExternalProject_Add(
+    pgl
+    PREFIX ${CMAKE_BINARY_DIR}/pgl
+    GIT_REPOSITORY https://github.com/haisenzhao/personal-geom-lib.git
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    )
+ExternalProject_Get_Property(pgl source_dir)
+
+set(PglIncludeDir ${source_dir})
+
+
 #MESSAGE(STATUS ${CGAL_INCLUDE_DIR} " found")
-include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR} ${PglIncludeDir})
 
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-4.7.lib)
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-gd-4.7.lib)
@@ -95,6 +111,8 @@ TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/Wm5Mathe
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/Wm5WglGraphics.lib)
 	
 	
+add_dependencies(${PROJECT_NAME} pgl)
+
 
 #find_library(LIBHELLO_PATH CGAL_Core-vc120-mt-4.7 ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib)
 #IF(NOT LIBHELLO_PATH)
