@@ -23,7 +23,6 @@ set(CGAL_SOURCES
 	cgal/IO.cpp
 	cgal/kdtree.cpp
 	cgal/kdtree.h
-	cgal/math.hpp
 	cgal/NewtonApple_hull3D.cpp
 	cgal/NewtonApple_hull3D.h
 )

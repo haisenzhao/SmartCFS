@@ -62,7 +62,7 @@
 #include <CGAL/Side_of_triangle_mesh.h>
 #include <CGAL/Polygon_set_2.h>
 
-#include "math.hpp"
+#include "pgl_functs.hpp"
 
 typedef CGAL::Simple_cartesian<double> KC;
 typedef CGAL::Segment_Delaunay_graph_filtered_traits_without_intersections_2<KC> Gt;
