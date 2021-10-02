@@ -1,7 +1,9 @@
 #pragma once
 
 #include <stdafx.h>
-#include <MathHelper.h>
+#include "pgl_functs.hpp"
+
+using namespace PGL;
 
 namespace cnc {
 

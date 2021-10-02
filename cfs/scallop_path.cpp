@@ -10,12 +10,12 @@ namespace cnc {
 		Vector3d center, Vector3d CC, Vector3d tangent, double min_angle, double max_angle, double distance)
 	{
 		Vector3d project = CGAL_3D_Projection_Point_Plane(CC, center, tangent);
-		Vector3d base_p = SetVectorLength(project - center, 2.0) + center;
+		Vector3d base_p = Functs::SetVectorLength(project - center, 2.0) + center;
 		double middle_angle = (min_angle + max_angle) / 2.0;
 		Vector3d goal;
 		while (true)
 		{
-			goal = RotationAxis(base_p - center, middle_angle, tangent) + center;
+			goal = Functs::RotationAxis(base_p - center, middle_angle, tangent) + center;
 			double d = CGAL_3D_Distance_Point_Triangles(goal, vecs, face_id_0, face_id_1, face_id_2);
 			if (abs(d - distance) < 0.001) break;
 			if (d > distance)
@@ -86,10 +86,10 @@ namespace cnc {
 			Vector3d s1 = second_path[next_index];
 			Vector3d cl0 = first_path[index];
 			Vector3d cl1 = first_path[next_index];
-			Vector3d n0 = getCrossproduct(s1 - s0, cl0 - s0);
-			Vector3d n1 = getCrossproduct(s1 - cl1, cl0 - cl1);
+			Vector3d n0 = Functs::GetCrossproduct(s1 - s0, cl0 - s0);
+			Vector3d n1 = Functs::GetCrossproduct(s1 - cl1, cl0 - cl1);
 
-			if (MM_PI - getAngleBetween(n0, n1) > MM_PI / 2.0)
+			if (Math_PI - Functs::GetAngleBetween(n0, n1) > Math_PI / 2.0)
 			{
 				deleted_points[index] = true;
 				deleted_points[next_index] = true;
@@ -141,7 +141,7 @@ namespace cnc {
 				local_vecs, local_face_id_0, local_face_id_1, local_face_id_2);
 
 			Vector3d scallop_point = Binary_Search(local_vecs, local_face_id_0, local_face_id_1, local_face_id_2,
-				one_closed_cl_path[index], cc_path[index], tangents[index], 0.0, MM_PI / 2.0, 0.2);
+				one_closed_cl_path[index], cc_path[index], tangents[index], 0.0, Math_PI / 2.0, 0.2);
 
 			one_closed_scallop_path.push_back(scallop_point);
 
@@ -184,7 +184,7 @@ namespace cnc {
 				local_vecs, local_face_id_0, local_face_id_1, local_face_id_2);
 
 			Vector3d next_cl_point = Binary_Search(local_vecs, local_face_id_0, local_face_id_1, local_face_id_2,
-				one_closed_scallop_path[index], cc_path[index], tangents[index], 0.0, MM_PI, 2.0);
+				one_closed_scallop_path[index], cc_path[index], tangents[index], 0.0, Math_PI, 2.0);
 
 			one_closed_cl_path.push_back(next_cl_point);
 			
@@ -227,7 +227,7 @@ namespace cnc {
 		CGAL_Normal_Mesh(full_obj_path, boundarys[0], normals);
 		Circuit::Laplace_Smoothing(normals, 200);
 		for (int i = 0; i < boundarys[0].size(); i++)
-			boundarys[0][i] = boundarys[0][i] + SetVectorLength(normals[i], 2.0);
+			boundarys[0][i] = boundarys[0][i] + Functs::SetVectorLength(normals[i], 2.0);
 		one_closed_cl_path = boundarys[0];
 
 		//cutter_locations.push_back(one_closed_cl_path);

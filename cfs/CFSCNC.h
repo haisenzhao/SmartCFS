@@ -1,7 +1,7 @@
 #ifndef CFSCNC_ONCE
 #define CFSCNC_ONCE
 #pragma once
-#include "MathHelper.h"
+#include "pgl_functs.hpp"
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -9,8 +9,9 @@
 #include <string>
 #include <algorithm>
 
-namespace cnc {
+using namespace PGL;
 
+namespace cnc {
 
 	struct Part
 	{

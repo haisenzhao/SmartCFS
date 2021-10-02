@@ -3,7 +3,7 @@
 #include "Circuit.h"
 #include "cgalpackage.h"
 
-using namespace hpcg;
+using namespace PGL;
 
 namespace cnc {
 
@@ -18,40 +18,40 @@ namespace cnc {
 	{
 		input_path = path;
 
-		if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + "_split.obj", std::ios::in) || re_running)
+		if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + "_split.obj", std::ios::in) || re_running)
 		{
 			string com_split = "";
 			com_split += "D:\\CNCProduction\\Release\\geodesic_isoline_usage_shiqing\\Split.exe";
 			com_split += " ";
-			com_split += path + "\\" + IntString(cfs_index) + ".obj";
+			com_split += path + "\\" + Functs::IntString(cfs_index) + ".obj";
 			com_split += " ";
 			com_split += "0.2";
 			com_split += " ";
-			com_split += path + "\\path\\" + IntString(cfs_index) + "_split.obj";
+			com_split += path + "\\path\\" + Functs::IntString(cfs_index) + "_split.obj";
 			system(com_split.c_str());
 		}
 
-		if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + ".offsets_path", std::ios::in) || re_running)
+		if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + ".offsets_path", std::ios::in) || re_running)
 		{
 			if (whether_using_heat)
 			{
-				if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + "_heat_sub.obj", std::ios::in) || re_running)
-					CGAL_Mesh_Loop_Subdivision_Own_Version(path + "\\" + IntString(cfs_index) + ".obj", sub_div, path + "\\path\\" + IntString(cfs_index) + "_heat_sub.obj");
+				if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub.obj", std::ios::in) || re_running)
+					CGAL_Mesh_Loop_Subdivision_Own_Version(path + "\\" + Functs::IntString(cfs_index) + ".obj", sub_div, path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub.obj");
 
-				if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + "_heat_sub_split.obj", std::ios::in) || re_running)
+				if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub_split.obj", std::ios::in) || re_running)
 				{
 					string com_split = "";
 					com_split += "D:\\CNCProduction\\Release\\geodesic_isoline_usage_shiqing\\Split.exe";
 					com_split += " ";
-					com_split += path + "\\path\\" + IntString(cfs_index) + "_heat_sub.obj";
+					com_split += path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub.obj";
 					com_split += " ";
 					com_split += "0.4";
 					com_split += " ";
-					com_split += path + "\\path\\" + IntString(cfs_index) + "_heat_sub_split.obj";
+					com_split += path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub_split.obj";
 					system(com_split.c_str());
 				}
 
-				Output_Boundary(path + "\\path\\" + IntString(cfs_index) + "_heat_sub_split.obj", path + "\\path\\" + IntString(cfs_index) + "_heat.source");
+				Output_Boundary(path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub_split.obj", path + "\\path\\" + Functs::IntString(cfs_index) + "_heat.source");
 				//Output_Heat_Loop_Curvature_Factor(path + "\\path\\" + IntString(cfs_index) + "_heat_sub_split.obj", path + "\\path\\" + IntString(cfs_index) + "_heat_factor.source");
 			}
 			else
@@ -60,53 +60,53 @@ namespace cnc {
 
 				for (int i = 0; i < objs[cfs_index].size(); i++)
 				{
-					std::cout << "Compute offsets: " << IntString(cfs_index) << " " << IntString(objs[cfs_index][i]) << std::endl;
-					if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + "_sub.obj", std::ios::in) || re_running)
+					std::cout << "Compute offsets: " << Functs::IntString(cfs_index) << " " << Functs::IntString(objs[cfs_index][i]) << std::endl;
+					if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + "_sub.obj", std::ios::in) || re_running)
 					{
 						string com_sub = "";
 						com_sub += "D:\\CNCProduction\\Release\\geodesic_isoline_usage_shiqing\\Subdivide.exe";
 						com_sub += " ";
-						com_sub += path + "\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + ".obj";
+						com_sub += path + "\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + ".obj";
 						com_sub += " ";
-						com_sub += DoubleString(0.1);
+						com_sub += Functs::DoubleString(0.1);
 						com_sub += " ";
-						com_sub += path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + "_sub.obj";
+						com_sub += path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + "_sub.obj";
 						system(com_sub.c_str());
 					}
 
-					if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + "_sub_split.obj", std::ios::in) || re_running)
+					if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + "_sub_split.obj", std::ios::in) || re_running)
 					{
 						string com_split = "";
 						com_split += "D:\\CNCProduction\\Release\\geodesic_isoline_usage_shiqing\\Split.exe";
 						com_split += " ";
-						com_split += path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + "_sub.obj";
+						com_split += path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + "_sub.obj";
 						com_split += " ";
 						com_split += "0.1";
 						com_split += " ";
-						com_split += path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + "_sub_split.obj";
+						com_split += path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + "_sub_split.obj";
 						system(com_split.c_str());
 					}
 
-					if (!std::ifstream(path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + ".offsets", std::ios::in) || re_running)
+					if (!std::ifstream(path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + ".offsets", std::ios::in) || re_running)
 					{
 						string com_isoline = "";
 						com_isoline += "D:\\CNCProduction\\Release\\geodesic_isoline_usage_shiqing\\isoline.exe";
 						com_isoline += " ";
-						com_isoline += path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + "_sub_split.obj";
+						com_isoline += path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + "_sub_split.obj";
 						//com_isoline += path +"\\"+ IntString(cfs_index) + "_" + IntString(i) + ".obj";
 						com_isoline += " ";
-						com_isoline += DoubleString(max_scallop);
+						com_isoline += Functs::DoubleString(max_scallop);
 						com_isoline += " ";
-						com_isoline += DoubleString(drill_radius);
+						com_isoline += Functs::DoubleString(drill_radius);
 						com_isoline += " ";
-						com_isoline += path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + ".offsets";
+						com_isoline += path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + ".offsets";
 						system(com_isoline.c_str());
 					}
 					/***********************************************************************************************/
-					offsets_files.push_back(path + "\\path\\" + IntString(cfs_index) + "_" + IntString(objs[cfs_index][i]) + ".offsets");
+					offsets_files.push_back(path + "\\path\\" + Functs::IntString(cfs_index) + "_" + Functs::IntString(objs[cfs_index][i]) + ".offsets");
 				}
 
-				Circuit::OutputOffsetsFiles(offsets_files, path + "\\path\\" + IntString(cfs_index) + ".offsets_path");
+				Circuit::OutputOffsetsFiles(offsets_files, path + "\\path\\" + Functs::IntString(cfs_index) + ".offsets_path");
 			}
 		}
 	}

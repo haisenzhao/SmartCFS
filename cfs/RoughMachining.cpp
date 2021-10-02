@@ -11,7 +11,7 @@ namespace cnc {
 		return Vector3d1();
 		double radius = 0.2;
 		auto normal = end - start;
-		double total_depth = Math::GetLength(normal);
+		double total_depth = Functs::GetLength(normal);
 
 		Vector3d base_1 = CGAL_3D_Plane_Base_1(start, normal);
 		double length_base_1 = glm::length(base_1);
@@ -26,10 +26,10 @@ namespace cnc {
 		{
 			double depth = (double)i / (double)47 * total_depth;
 			auto nnn = normal;
-			auto aaa = Math::SetVectorLength(nnn, depth);
+			auto aaa = Functs::SetVectorLength(nnn, depth);
 
-			double angle = i *  Math::Math_PI / 4;
-			Vector3d v = Math::RotationAxis(base_1 + aaa, angle, normal);
+			double angle = i *  Functs::Math_PI / 4;
+			Vector3d v = Functs::RotationAxis(base_1 + aaa, angle, normal);
 			vecs.push_back(v + start);
 		}
 
@@ -184,10 +184,10 @@ namespace cnc {
 
 		//clear folder
 		std::cerr << "#Clear working folder..." << std::endl;
-		Math::ClearFolder(path + "boundary\\");
-		Math::ClearFolder(path + "path\\");
-		Math::ClearFolder(path + "debug\\");
-		//if (re_running)Math::ClearFolder(path + "output\\");
+		Functs::ClearFolder(path + "boundary\\");
+		Functs::ClearFolder(path + "path\\");
+		Functs::ClearFolder(path + "debug\\");
+		//if (re_running)Functs::ClearFolder(path + "output\\");
 
 		//load setting
 		std::cerr << "# Load setting..." << std::endl;
@@ -256,7 +256,7 @@ namespace cnc {
 				for (int i = 0; i < sequences[seg_index].size(); i++)
 				{
 					auto  node_index = sequences[seg_index][i];
-					auto name = "layer_boundary_" + std::to_string(seg_index) + "_" + std::to_string(i) + "_" + IntString(node_index);
+					auto name = "layer_boundary_" + std::to_string(seg_index) + "_" + std::to_string(i) + "_" + Functs::IntString(node_index);
 					auto a = PosApplyM(base_nodes[node_index].boundary, glm::inverse(rm));
 					Circuit::OutputOffsets(path + "boundary\\" + name + ".obj", a, name);
 				}
@@ -310,7 +310,7 @@ namespace cnc {
 	{
 		std::ofstream file(file_path);
 
-		auto points_2d = Math::Vector3d2d(cut_offsets);
+		auto points_2d = Functs::Vector3d2d(cut_offsets);
 		auto triangles = CGAL_2D_Polygon_Triangulation(points_2d);
 
 		for (int i = 0; i<cut_offsets.size(); i++)
@@ -340,13 +340,13 @@ namespace cnc {
 		int nb = 1;
 		for (int iter = 0; iter < cut_offsets.size(); iter++)
 		{
-			auto points_2d = Math::Vector3d2d(cut_offsets[iter]);
+			auto points_2d = Functs::Vector3d2d(cut_offsets[iter]);
 			std::vector<std::vector<Vector2d>> offsets_xys;
 			
 			CGAL_2D_Polygon_One_Offsets(points_2d, offset, offsets_xys);
 
-			auto points_3d = Math::Vector2d3d(offsets_xys[0], cut_offsets[iter].front()[2]);
-			auto triangles = CGAL_2D_Polygon_Triangulation(Math::Vector3d2d(points_3d));
+			auto points_3d = Functs::Vector2d3d(offsets_xys[0], cut_offsets[iter].front()[2]);
+			auto triangles = CGAL_2D_Polygon_Triangulation(Functs::Vector3d2d(points_3d));
 
 			for (int i = 0; i<points_3d.size(); i++)
 			{
@@ -415,7 +415,7 @@ namespace cnc {
 				
 					if (clear_points_2d.size() < 3)continue;
 
-					auto length = Circuit::GetTotalLength(Math::Vector2d3d(clear_points_2d));
+					auto length = Circuit::GetTotalLength(Functs::Vector2d3d(clear_points_2d));
 					//auto area = CGAL_2D_Polygon_Area(clear_points_2d);
 					if (length > length_threshold)
 					{
@@ -424,10 +424,10 @@ namespace cnc {
 							auto area = CGAL_2D_Polygon_Area(clear_points_2d);
 
 
-							auto v = PosApplyM(Math::Vector2d3d(clear_points_2d, plane_d[i]), glm::inverse(rm));
+							auto v = PosApplyM(Functs::Vector2d3d(clear_points_2d, plane_d[i]), glm::inverse(rm));
 							Circuit::OutputOffsets1(path + "debug\\debug.obj", v);
 
-							v = PosApplyM(Math::Vector2d3d(points_2d, plane_d[i]), glm::inverse(rm));
+							v = PosApplyM(Functs::Vector2d3d(points_2d, plane_d[i]), glm::inverse(rm));
 							Circuit::OutputOffsets1(path + "debug\\debug1.obj", v);
 
 							std::cerr << "if (!CGAL_2D_Polygon_Simple(clear_points_2d))" << std::endl;
@@ -440,18 +440,18 @@ namespace cnc {
 
 							if (area > area_threshold)
 							{
-								layer_offsets.emplace_back(Math::Vector2d3d(clear_points_2d, plane_d[i]));
+								layer_offsets.emplace_back(Functs::Vector2d3d(clear_points_2d, plane_d[i]));
 							}
 							else
 							{
-								if (length>removed_length_threshold) layer_removed_offsets.emplace_back(Math::Vector2d3d(clear_points_2d, plane_d[i]));
+								if (length>removed_length_threshold) layer_removed_offsets.emplace_back(Functs::Vector2d3d(clear_points_2d, plane_d[i]));
 							}
 				
 						}
 					}
 					else
 					{
-						if (length>removed_length_threshold) layer_removed_offsets.emplace_back(Math::Vector2d3d(clear_points_2d, plane_d[i]));
+						if (length>removed_length_threshold) layer_removed_offsets.emplace_back(Functs::Vector2d3d(clear_points_2d, plane_d[i]));
 					}
 				}
 				rough_boundaries.emplace_back(layer_offsets);
@@ -499,7 +499,7 @@ namespace cnc {
 
 			//std::cerr << "Generate initial cut manually..." << std::endl;
 			//system("pause");
-			Math::ClearFolder(path + "boundary\\");
+			Functs::ClearFolder(path + "boundary\\");
 		}
 
 	
@@ -719,8 +719,8 @@ namespace cnc {
 							{
 								if (bbb[j] && bbb[k])
 								{
-									auto outside_py = Math::Vector3d2d(layer_boundary[j]);
-									auto inside_py = Math::Vector3d2d(layer_boundary[k]);
+									auto outside_py = Functs::Vector3d2d(layer_boundary[j]);
+									auto inside_py = Functs::Vector3d2d(layer_boundary[k]);
 
 									if (CGAL_2D_Detect_Polygon_Inside(outside_py, inside_py))
 									{
@@ -780,7 +780,7 @@ namespace cnc {
 			{
 				for (int i = 0; i < base_node.boundary.size(); i++)
 				{
-					bool b = CGAL_2D_Polygon_Is_Clockwise_Oriented(Math::Vector3d2d(base_node.boundary[i]));
+					bool b = CGAL_2D_Polygon_Is_Clockwise_Oriented(Functs::Vector3d2d(base_node.boundary[i]));
 					if ((i == 0 && b) || (i != 0 && !b))
 						std::reverse(base_node.boundary[i].begin(), base_node.boundary[i].end());
 				}
@@ -791,10 +791,10 @@ namespace cnc {
 			{
 				for (int i = 0; i < base_nodes.size(); i++)
 				{
-					auto name = "base_node_" + IntString(i) + "_" + std::to_string(base_nodes[i].layer);
+					auto name = "base_node_" + Functs::IntString(i) + "_" + std::to_string(base_nodes[i].layer);
 					auto a = PosApplyM(base_nodes[i].boundary, glm::inverse(rm));
 					Circuit::OutputOffsets(path + "boundary\\" + name + ".obj", a, name);
-					name = "base_node_tri_" + IntString(i) + "_" + std::to_string(base_nodes[i].layer);
+					name = "base_node_tri_" + Functs::IntString(i) + "_" + std::to_string(base_nodes[i].layer);
 					OutputNodeTriangles(path + "boundary\\" + name + ".obj", base_nodes[i].boundary, rm);
 				}
 			}
@@ -812,8 +812,8 @@ namespace cnc {
 					int min_cur_node = -1;
 					for (auto cur_node : current_nodes)
 					{
-						auto outside_boundary = Math::Vector3d2d(base_nodes[cur_node].boundary);
-						auto inside_boundary = Math::Vector3d2d(base_nodes[next_node].boundary);
+						auto outside_boundary = Functs::Vector3d2d(base_nodes[cur_node].boundary);
+						auto inside_boundary = Functs::Vector3d2d(base_nodes[next_node].boundary);
 
 						double dis = CGAL_2D_Distance_Polygon_Polygon(outside_boundary, inside_boundary);
 
@@ -905,19 +905,19 @@ namespace cnc {
 			{
 				auto node_index = sequences[seg_index][i];
 				auto cur_points = base_nodes[node_index].boundary;
-				auto cur_points_2d = Math::Vector3d2d(cur_points);
-				auto pre_points = Math::Vector2d3d(cur_points_2d, base_nodes[node_index].plane_d - delta_plane_d);
+				auto cur_points_2d = Functs::Vector3d2d(cur_points);
+				auto pre_points = Functs::Vector2d3d(cur_points_2d, base_nodes[node_index].plane_d - delta_plane_d);
 
 				if (false)
 				{
 					auto pre_points_2d = cur_points_2d;
 					auto outside_points = base_nodes[sequences[seg_index][i - 1]].boundary;
-					auto outside_points_2d = Math::Vector3d2d(outside_points);
+					auto outside_points_2d = Functs::Vector3d2d(outside_points);
 
 					for (int j = 0; j < pre_points_2d.size(); j++)
 					for (int k = 0; k < pre_points_2d[j].size(); k++)
 						pre_points_2d[j][k] = CGAL_2D_Nearest_Point_Polygon(pre_points_2d[j][k], outside_points_2d);
-					pre_points = Math::Vector2d3d(pre_points_2d, base_nodes[node_index].plane_d - delta_plane_d);
+					pre_points = Functs::Vector2d3d(pre_points_2d, base_nodes[node_index].plane_d - delta_plane_d);
 				}
 
 				auto triangles = CGAL_2D_Polygon_Triangulation(cur_points_2d);
@@ -1036,14 +1036,14 @@ namespace cnc {
 			for (auto & bro_node : bro_nodes)
 			{
 				const auto &node = base_nodes[bro_node];
-				for (const auto&boundary : node.boundary)bro_boundary.emplace_back(Math::Vector3d2d(boundary));
+				for (const auto&boundary : node.boundary)bro_boundary.emplace_back(Functs::Vector3d2d(boundary));
 			}
 
 			//cur boundary
-			Vector2d2 cur_boundary = Math::Vector3d2d(l_node.boundary);
+			Vector2d2 cur_boundary = Functs::Vector3d2d(l_node.boundary);
 
 			//pare boundary
-			Vector2d2 pare_boundary = Math::Vector3d2d(h_node.boundary);
+			Vector2d2 pare_boundary = Functs::Vector3d2d(h_node.boundary);
 			std::vector<std::vector<bool>> indicator(pare_boundary.size(),std::vector<bool>());
 			Vector3d1 points_0, points_1;
 			std::vector<std::string> name_0, name_1;
@@ -1217,8 +1217,8 @@ namespace cnc {
 
 
 
-			seg_true = Math::Vector2d3d(ConnectingSegs(seges_true, pare_boundary), h_node.plane_d);
-			seg_false = Math::Vector2d3d(ConnectingSegs(seges_false, pare_boundary), h_node.plane_d);
+			seg_true = Functs::Vector2d3d(ConnectingSegs(seges_true, pare_boundary), h_node.plane_d);
+			seg_false = Functs::Vector2d3d(ConnectingSegs(seges_false, pare_boundary), h_node.plane_d);
 
 			Circuit::OutputOffsets(path + "debug\\seg_true.obj", seg_true, "seg_true");
 			Circuit::OutputOffsets(path + "debug\\seg_false.obj", seg_false, "seg_false");
@@ -1324,7 +1324,7 @@ namespace cnc {
 
 
 		auto cut_normal = -plane_n;
-		Math::SetVectorLength(cut_normal,1.0);
+		Functs::SetVectorLength(cut_normal,1.0);
 
 		auto s = rough_machining_path.front();
 
@@ -1369,9 +1369,9 @@ namespace cnc {
 		{
 			Vector3d x,y,z;
 			z = n;
-			double angle = Math::GetAngleBetween(z, Vector3d(0.0, 1.0, 0.0));
+			double angle = Functs::GetAngleBetween(z, Vector3d(0.0, 1.0, 0.0));
 			angle = RadiantoAngle(angle);
-			if (Math::IsAlmostZero(angle))
+			if (Functs::IsAlmostZero(angle))
 			{
 				z = Vector3d(0.0, 1.0, 0.0);
 				x = Vector3d(1.0, 0.0, 0.0);
@@ -1380,21 +1380,21 @@ namespace cnc {
 			else
 			{
 				Vector3d axis = GetCrossproduct(z, Vector3d(0.0, 1.0, 0.0));
-				y = RotationAxis(z, MM_PI / 2.0, axis);
+				y = RotationAxis(z, Math_PI / 2.0, axis);
 				x = GetCrossproduct(y, z);
 			}
-			Math::ClearVector3d(x);
-			Math::ClearVector3d(y);
-			Math::ClearVector3d(z);
-			x = x / (float)Math::GetLength(x);
-			y = y / (float)Math::GetLength(y);
-			z = z / (float)Math::GetLength(z);
+			Functs::ClearVector3d(x);
+			Functs::ClearVector3d(y);
+			Functs::ClearVector3d(z);
+			x = x / (float)Functs::GetLength(x);
+			y = y / (float)Functs::GetLength(y);
+			z = z / (float)Functs::GetLength(z);
 
 			//m
 			m = RotationMatrixXYZ(x, y, z);
 
 			//AB
-			if (Math::IsAlmostZero(angle))
+			if (Functs::IsAlmostZero(angle))
 			{
 				A = 90.0;
 				B = 0.0;
@@ -1402,7 +1402,7 @@ namespace cnc {
 			else
 			{
 				A = 90.0 - angle;
-				B = Math::GetAngleBetween(Vector3d(z[0],0.0,z[2]), Vector3d(0.0, 0.0, 1.0));
+				B = Functs::GetAngleBetween(Vector3d(z[0],0.0,z[2]), Vector3d(0.0, 0.0, 1.0));
 				B = RadiantoAngle(B);
 				if (z[0] > 0.0)B = 360.0 - B;
 			}
@@ -1428,10 +1428,10 @@ namespace cnc {
 			//-center
 			fusion_g[1] = fusion_g[1] - 1.859;
 			//rotation
-			//Vector3d rotate_v = RotationAxis(fusion_g, MM_PI / 2.0, Vector3d(0.0, 1.0, 0.0));
+			//Vector3d rotate_v = RotationAxis(fusion_g, Math_PI / 2.0, Vector3d(0.0, 1.0, 0.0));
 			Vector3d rotate_v = fusion_g;
 			//=>tool path rotation
-			//rotate_v = RotationAxis(rotate_v, MM_PI / 2.0*(plane_n.z), Vector3d(0.0, 1.0, 0.0));
+			//rotate_v = RotationAxis(rotate_v, Math_PI / 2.0*(plane_n.z), Vector3d(0.0, 1.0, 0.0));
 			rotate_v = PosApplyM(rotate_v, rm);
 			vecs.emplace_back(rotate_v);
 		}
@@ -1539,7 +1539,7 @@ namespace cnc {
 			//3d 2d
 			Vector2d3 rough_boundaries_2d;
 			for (int i = 0; i < rough_boundaries.size(); i++)
-				rough_boundaries_2d.emplace_back(Math::Vector3d2d(rough_boundaries[i]));
+				rough_boundaries_2d.emplace_back(Functs::Vector3d2d(rough_boundaries[i]));
 
 			//final boundary
 			auto final_boundary = rough_boundaries_2d.back();
@@ -1552,7 +1552,7 @@ namespace cnc {
 
 			Vector3d1 start_ends;
 			for (int i = 0; i < plane_d.size(); i++)
-				start_ends.emplace_back(Math::Vector2d3d(inner_vec, plane_d[i]));
+				start_ends.emplace_back(Functs::Vector2d3d(inner_vec, plane_d[i]));
 
 			return start_ends;
 		};
@@ -1569,7 +1569,7 @@ namespace cnc {
 			//if (plane_d[i] != 31)continue;
 
 			//i = 13;
-			std::cerr << "Generate CFS for the layer: " << Math::IntString(i) << " plane_d:" << std::to_string(plane_d[i]) << std::endl;
+			std::cerr << "Generate CFS for the layer: " << Functs::IntString(i) << " plane_d:" << std::to_string(plane_d[i]) << std::endl;
 
 			cfs.ClearAll();
 			cfs.cfs_index = i;
@@ -1595,7 +1595,7 @@ namespace cnc {
 			for (int j = 0; j <= location_index; j++)
 				new_single_path.emplace_back(cfs.single_path[j]);
 
-			auto layer_path = Math::Vector2d3d(Math::Vector3d2d(new_single_path), plane_d[i]);
+			auto layer_path = Functs::Vector2d3d(Functs::Vector3d2d(new_single_path), plane_d[i]);
 
 			Strip::SmoothingLines(layer_path, 3);
 			Strip::ConnectingSameDirectionLines(layer_path);

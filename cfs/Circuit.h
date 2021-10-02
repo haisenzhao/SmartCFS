@@ -3,13 +3,13 @@
 #pragma once
 
 #include <stdafx.h>
-#include <MathHelper.h>
+#include "pgl_functs.hpp"
 #include <Strip.h>
 
 #include <Constant.h>
 
-using namespace hpcg;
 using namespace std;
+using namespace PGL;
 
 namespace cnc {
 
@@ -550,7 +550,7 @@ namespace cnc {
 					par_1 = Circuit::DeltaDEuclideanDistance(par_0, delta, input_points_1);
 					Vector3d lower_v_0 = Circuit::GetOnePointFromOffset(par_0, input_points_1);
 					Vector3d lower_v_1 = Circuit::GetOnePointFromOffset(par_1, input_points_1);
-					double angle = getAngleBetween(upper_v_1 - upper_v_0, lower_v_1 - lower_v_0);
+					double angle = Functs::GetAngleBetween(upper_v_1 - upper_v_0, lower_v_1 - lower_v_0);
 					if (angle > 3.141592653 / 2.0)
 					{
 						turn_vote++;
@@ -665,7 +665,7 @@ namespace cnc {
 					Vector3d v0 = input_points[(i + input_points.size() - 1) % input_points.size()];
 					Vector3d v1 = input_points[i];
 					Vector3d v2 = input_points[(i + input_points.size() + 1) % input_points.size()];
-					points.push_back((v0 + v1 + v2) / (float)3.0);
+					points.push_back((v0 + v1 + v2) / 3.0);
 				}
 				input_points = points;
 			}
@@ -687,12 +687,12 @@ namespace cnc {
 				Vector3d v1 = input_points[i];
 				Vector3d v2 = input_points[(i + input_points.size() + 1) % input_points.size()];
 			
-				double length_0 = getLength(v1 - v0);
-				double length_1 = getLength(v2 - v1);
+				double length_0 = Functs::GetLength(v1 - v0);
+				double length_1 = Functs::GetLength(v2 - v1);
 
-				Vector3d tangent = ((float)length_0*SetVectorLength((v1 - v0), 1.0) + 
-					                (float)length_1*SetVectorLength((v2 - v1), 1.0)) / (float)(length_0 + length_1);
-				tangents.push_back(SetVectorLength(tangent, 1.0));
+				Vector3d tangent = (length_0*Functs::SetVectorLength((v1 - v0), 1.0) +
+					length_1*Functs::SetVectorLength((v2 - v1), 1.0)) / (length_0 + length_1);
+				tangents.push_back(Functs::SetVectorLength(tangent, 1.0));
 			}
 		}
 
@@ -713,7 +713,7 @@ namespace cnc {
 				{
 					if (d < l)
 					{
-						Vector3d v = (float)(1.0 - d / l)*s + (float)(d / l)*e;
+						Vector3d v = (1.0 - d / l)*s + (d / l)*e;
 						output_points.emplace_back(v);
 						d = d + delta_length;
 					}
@@ -736,20 +736,20 @@ namespace cnc {
 				{
 					if (vecs_0.empty()) vecs_0.emplace_back(vecs[i]);
 					else
-						if (!Math::IsAlmostZero_Double(Math::GetLength(vecs_0.back(), vecs[i]),0.1))
+						if (!Functs::IsAlmostZero_Double(Functs::GetLength(vecs_0.back(), vecs[i]),0.1))
 							vecs_0.emplace_back(vecs[i]);
 				}
 				else
 				{
 					if (vecs_0.empty()) vecs_0.emplace_back(vecs[i]);
 					else
-					if (!Math::IsAlmostZero_Double(Math::GetLength(vecs_0.back(), vecs[i]), 0.1) &&
-						!Math::IsAlmostZero_Double(Math::GetLength(vecs_0.front(), vecs[i]), 0.1))
+					if (!Functs::IsAlmostZero_Double(Functs::GetLength(vecs_0.back(), vecs[i]), 0.1) &&
+						!Functs::IsAlmostZero_Double(Functs::GetLength(vecs_0.front(), vecs[i]), 0.1))
 							vecs_0.emplace_back(vecs[i]);
 				}
 			}
 
-			if (Math::IsAlmostZero_Double(Math::GetLength(vecs_0.front(), vecs_0.back()),0.1)) vecs_0.erase(vecs_0.begin());
+			if (Functs::IsAlmostZero_Double(Functs::GetLength(vecs_0.front(), vecs_0.back()),0.1)) vecs_0.erase(vecs_0.begin());
 
 			//remove collinear points
 			Vector2d1 vecs_1;
@@ -758,8 +758,8 @@ namespace cnc {
 				auto pre_v = vecs_0[(i + vecs_0.size() - 1) % vecs_0.size()];
 				auto cur_v = vecs_0[i];
 				auto next_v = vecs_0[(i + 1) % vecs_0.size()];
-				double angle = Math::GetAngleBetween(cur_v - pre_v, next_v - cur_v);
-				if (!Math::IsAlmostZero(angle))
+				double angle = Functs::GetAngleBetween(cur_v - pre_v, next_v - cur_v);
+				if (!Functs::IsAlmostZero(angle))
 					vecs_1.emplace_back(cur_v);
 			}
 			return vecs_1;
@@ -899,7 +899,7 @@ namespace cnc {
 				if (name_b)
 					CGAL_Export_Path_Segment(debug_file, debug_index, "name", 1.0, 0.0, 0.0, s, e, 0.05);
 				else
-					CGAL_Export_Path_Segment(debug_file, debug_index, "name_" + IntString(j), 1.0, 0.0, 0.0, s, e, 0.05);
+					CGAL_Export_Path_Segment(debug_file, debug_index, "name_" + Functs::IntString(j), 1.0, 0.0, 0.0, s, e, 0.05);
 			}
 
 			debug_file.clear();

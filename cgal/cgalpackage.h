@@ -64,6 +64,8 @@
 
 #include "pgl_functs.hpp"
 
+using namespace PGL;
+
 typedef CGAL::Simple_cartesian<double> KC;
 typedef CGAL::Segment_Delaunay_graph_filtered_traits_without_intersections_2<KC> Gt;
 typedef CGAL::Segment_Delaunay_graph_2<Gt>  SDG2;

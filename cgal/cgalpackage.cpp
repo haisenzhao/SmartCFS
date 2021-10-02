@@ -207,7 +207,7 @@ void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path,
 /***************************************************************************************************/
 
 //static const double DOUBLE_EPSILON = 1.0E-05;
-//inline bool Math::IsAlmostZero(double value) {
+//inline bool Functs::IsAlmostZero(double value) {
 //	return value < 10.0 * DOUBLE_EPSILON && value > -10.0 * DOUBLE_EPSILON;
 //}
 
@@ -1485,7 +1485,7 @@ bool CGAL_3D_Intersection_Segment_Line(Vector3d s_s, Vector3d s_e, Vector3d l_s,
 {
 	double d = CGAL_3D_Distance_Point_Point(s_s[0], s_s[1], s_s[2], s_e[0], s_e[1], s_e[2]);
 
-	if (!Math::IsAlmostZero(d))
+	if (!Functs::IsAlmostZero(d))
 	{
 		CGAL::Object result = CGAL::intersection(Segment_3(VectorPoint3d(s_s), VectorPoint3d(s_e)),
 			Line_3(VectorPoint3d(l_s), VectorPoint3d(l_e)));
@@ -1515,7 +1515,7 @@ bool CGAL_3D_Intersection_Segment_Segment(Vector3d s_0_s, Vector3d s_0_e, Vector
 	double d0 = CGAL_3D_Distance_Point_Point(s_0_s[0], s_0_s[1], s_0_s[2], s_0_e[0], s_0_e[1], s_0_e[2]);
 	double d1 = CGAL_3D_Distance_Point_Point(s_1_s[0], s_1_s[1], s_1_s[2], s_1_e[0], s_1_e[1], s_1_e[2]);
 
-	if (!Math::IsAlmostZero(d0) && !Math::IsAlmostZero(d1))
+	if (!Functs::IsAlmostZero(d0) && !Functs::IsAlmostZero(d1))
 	{
 		CGAL::Object result = CGAL::intersection(Segment_3(VectorPoint3d(s_0_s), VectorPoint3d(s_0_e)),
 			Segment_3(VectorPoint3d(s_1_s), VectorPoint3d(s_1_e)));
@@ -1765,7 +1765,7 @@ Vector3d LaplaceMeshSmoothForOnePoint(int id, Vector3d1 &vecs, Vector3d1 &min_cu
 	Vector3d curvature_direction = min_curvature_direction[id];
 	std::vector<std::vector<int>> &edges = surface_vectices_to_neighbor_edges[id];
 
-	Vector3d product_vector = Math::GetCrossproduct(normal, curvature_direction);
+	Vector3d product_vector = Functs::GetCrossproduct(normal, curvature_direction);
 
 	Vector3d1 inters;
 
@@ -1781,7 +1781,7 @@ Vector3d LaplaceMeshSmoothForOnePoint(int id, Vector3d1 &vecs, Vector3d1 &min_cu
 
 	if (inters.size() == 2)
 	{
-		Vector3d surface_normal = Math::GetCrossproduct(Math::GetCrossproduct(normal, inters[1] - inters[0]), inters[1] - inters[0]);
+		Vector3d surface_normal = Functs::GetCrossproduct(Functs::GetCrossproduct(normal, inters[1] - inters[0]), inters[1] - inters[0]);
 		Vector3d inter;
 		if (CGAL_3D_Intersection_Line_Plane(position, position + normal, inters[0], surface_normal, inter))
 			return inter;
@@ -1910,7 +1910,7 @@ void CGAL_Mesh_Laplace_Smooth_by_Curvature(Vector3d1 &vecs, std::vector<int> &fa
 
 				if (run)
 				{
-					Vector3d cur_v = vecs[i] + Math::SetVectorLength(vecs_normals[i], 0.001*min_curvature[i] / low_curvature);
+					Vector3d cur_v = vecs[i] + Functs::SetVectorLength(vecs_normals[i], 0.001*min_curvature[i] / low_curvature);
 
 					Vector3d smooth_v(0.0,0.0,0.0);
 
@@ -3851,9 +3851,9 @@ void Curvature_Direction_Adjusting(Vector3d &cur_0, Vector3d &cur_1, Vector3d &c
 		{
 			for (int k = -1; k <= 1; k = k + 2)
 			{
-				double angle_0 = Math::GetAngleBetween(cur_0*(float)i, cur_1*(float)j);
-				double angle_1 = Math::GetAngleBetween(cur_0*(float)i, cur_2*(float)k);
-				double angle_2 = Math::GetAngleBetween(cur_2*(float)k, cur_1*(float)j);
+				double angle_0 = Functs::GetAngleBetween(cur_0*(float)i, cur_1*(float)j);
+				double angle_1 = Functs::GetAngleBetween(cur_0*(float)i, cur_2*(float)k);
+				double angle_2 = Functs::GetAngleBetween(cur_2*(float)k, cur_1*(float)j);
 
 				if (angle > angle_0 + angle_1 + angle_2)
 				{
@@ -4605,10 +4605,10 @@ void CGAL_Surface_Decomposition(std::string path, std::vector<double> &face_sdf,
 
 bool InterpolationPoint(Vector3d v0, Vector3d v1, double psd0, double  psd1, double d, Vector3d &inter)
 {
-	if (Math::IsAlmostZero(d - psd0)) psd0 = d;
-	if (Math::IsAlmostZero(psd1 - d)) psd1 = d;
+	if (Functs::IsAlmostZero(d - psd0)) psd0 = d;
+	if (Functs::IsAlmostZero(psd1 - d)) psd1 = d;
 
-	if (!Math::IsAlmostZero(psd1 - psd0) && ((d >= psd0&&d <= psd1) || (d >= psd1&&d <= psd0)))
+	if (!Functs::IsAlmostZero(psd1 - psd0) && ((d >= psd0&&d <= psd1) || (d >= psd1&&d <= psd0)))
 	{
 		if (d >= psd1&&d <= psd0)
 		{
@@ -4642,10 +4642,10 @@ void CGAL_3D_Connecting_Segments(Vector2d2 &segments, Vector2d2 &lines)
 		{
 			if (i != j&&!used[i] && !used[j])
 			{
-				bool b_0_0 = Math::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][0], segments[j][0]), 1.0E-09);
-				bool b_0_1 = Math::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][0], segments[j][1]), 1.0E-09);
-				bool b_1_0 = Math::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][1], segments[j][0]), 1.0E-09);
-				bool b_1_1 = Math::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][1], segments[j][1]), 1.0E-09);
+				bool b_0_0 = Functs::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][0], segments[j][0]), 1.0E-09);
+				bool b_0_1 = Functs::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][0], segments[j][1]), 1.0E-09);
+				bool b_1_0 = Functs::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][1], segments[j][0]), 1.0E-09);
+				bool b_1_1 = Functs::IsAlmostZero_Double(CGAL_2D_Distance_Point_Point(segments[i][1], segments[j][1]), 1.0E-09);
 
 				if ((b_0_0&&b_1_1) || (b_0_1&&b_1_0))
 				{
@@ -4762,10 +4762,10 @@ void CGAL_3D_Connecting_Segments(Vector3d2 &segments, Vector3d2 &lines)
 		{
 			if (i != j&&!used[i] && !used[j])
 			{
-				bool b_0_0 = Math::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][0]), 1.0E-09);
-				bool b_0_1 = Math::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][1]), 1.0E-09);
-				bool b_1_0 = Math::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][0]), 1.0E-09);
-				bool b_1_1 = Math::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][1]), 1.0E-09);
+				bool b_0_0 = Functs::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][0]), 1.0E-09);
+				bool b_0_1 = Functs::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][1]), 1.0E-09);
+				bool b_1_0 = Functs::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][0]), 1.0E-09);
+				bool b_1_1 = Functs::IsAlmostZero_Double(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][1]), 1.0E-09);
 
 				if ((b_0_0&&b_1_1) || (b_0_1&&b_1_0))
 				{
@@ -4893,10 +4893,10 @@ void CGAL_3D_Connecting_Segments(Vector3d2 &segments, std::vector<std::vector<In
 				bool b_1_0 = CheckingEndEdge(edges[i][1], edges[j][0]);
 				bool b_1_1 = CheckingEndEdge(edges[i][1], edges[j][1]);
 
-				//bool b_0_0 = Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][0]));
-				//bool b_0_1 = Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][1]));
-				//bool b_1_0 = Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][0]));
-				//bool b_1_1 = Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][1]));
+				//bool b_0_0 = Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][0]));
+				//bool b_0_1 = Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][0], segments[j][1]));
+				//bool b_1_0 = Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][0]));
+				//bool b_1_1 = Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segments[i][1], segments[j][1]));
 
 				if ((b_0_0&&b_1_1) || (b_0_1&&b_1_0))
 				{
@@ -5020,7 +5020,7 @@ bool CGAL_3D_Mesh_Extract_Isoline(Vector3d1 &vecs, std::vector<int>& face_id_0, 
 		Vector3d v_1 = vecs[index_1];
 		Vector3d v_2 = vecs[index_2];
 
-		Vector3d  n = Math::GetCrossproduct(v_0 - v_2, v_1 - v_2);
+		Vector3d  n = Functs::GetCrossproduct(v_0 - v_2, v_1 - v_2);
 		Vector3d gradient = faces_gradients[i];
 
 		Vector3d inter_0_1;
@@ -5041,11 +5041,11 @@ bool CGAL_3D_Mesh_Extract_Isoline(Vector3d1 &vecs, std::vector<int>& face_id_0, 
 			endedge.push_back(Index(index_0, index_1));
 			endedge.push_back(Index(index_1, index_2));
 
-			if (!Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segment[0], segment[1])))
+			if (!Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segment[0], segment[1])))
 			{
-				Vector3d  gradient_n = Math::GetCrossproduct(segment[0] - segment[1], gradient);
-				double angle = Math::GetAngleBetween(gradient_n, n);
-				if (angle > Math::Math_PI / 2.0)
+				Vector3d  gradient_n = Functs::GetCrossproduct(segment[0] - segment[1], gradient);
+				double angle = Functs::GetAngleBetween(gradient_n, n);
+				if (angle > Functs::Math_PI / 2.0)
 					std::reverse(segment.begin(),segment.end());
 
 				segments.push_back(segment);
@@ -5062,11 +5062,11 @@ bool CGAL_3D_Mesh_Extract_Isoline(Vector3d1 &vecs, std::vector<int>& face_id_0, 
 			endedge.push_back(Index(index_1, index_2));
 			endedge.push_back(Index(index_2, index_0));
 
-			if (!Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segment[0], segment[1])))
+			if (!Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segment[0], segment[1])))
 			{
-				Vector3d  gradient_n = Math::GetCrossproduct(segment[0] - segment[1], gradient);
-				double angle = Math::GetAngleBetween(gradient_n, n);
-				if (angle > Math::Math_PI / 2.0)
+				Vector3d  gradient_n = Functs::GetCrossproduct(segment[0] - segment[1], gradient);
+				double angle = Functs::GetAngleBetween(gradient_n, n);
+				if (angle > Functs::Math_PI / 2.0)
 					std::reverse(segment.begin(), segment.end());
 
 				segments.push_back(segment);
@@ -5083,11 +5083,11 @@ bool CGAL_3D_Mesh_Extract_Isoline(Vector3d1 &vecs, std::vector<int>& face_id_0, 
 			endedge.push_back(Index(index_2, index_0));
 			endedge.push_back(Index(index_0, index_1));
 
-			if (!Math::IsAlmostZero(CGAL_3D_Distance_Point_Point(segment[0], segment[1])))
+			if (!Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(segment[0], segment[1])))
 			{
-				Vector3d  gradient_n = Math::GetCrossproduct(segment[0] - segment[1], gradient);
-				double angle = Math::GetAngleBetween(gradient_n, n);
-				if (angle > Math::Math_PI / 2.0)
+				Vector3d  gradient_n = Functs::GetCrossproduct(segment[0] - segment[1], gradient);
+				double angle = Functs::GetAngleBetween(gradient_n, n);
+				if (angle > Functs::Math_PI / 2.0)
 					std::reverse(segment.begin(), segment.end());
 
 				segments.push_back(segment);
@@ -5104,7 +5104,7 @@ bool CGAL_3D_Mesh_Extract_Isoline(Vector3d1 &vecs, std::vector<int>& face_id_0, 
 
 	//for (int i = 0; i < segments.size(); i++)
 	//{
-	//	CGAL_Export_Path_Segment(export_fie, export_int, "segment_" + Math::IntString(i), 1.0, 0.0, 0.0, segments[i][0], segments[i][1], 0.002);
+	//	CGAL_Export_Path_Segment(export_fie, export_int, "segment_" + Functs::IntString(i), 1.0, 0.0, 0.0, segments[i][0], segments[i][1], 0.002);
 	//}
 
 	//export_fie.clear();
@@ -5122,7 +5122,7 @@ bool CGAL_3D_Mesh_Extract_Isoline(Vector3d1 &vecs, std::vector<int>& face_id_0, 
 	//{
 	//	for (int j = 0; j < isolines.size()-1; j++)
 	//	{
-	//		CGAL_Export_Path_Segment(export_fie_0, export_int, "isolines_" + Math::IntString(i) + "_" + Math::IntString(j), 1.0, 0.0, 0.0, isolines[i][j], isolines[i][(j + 1)], 0.002);
+	//		CGAL_Export_Path_Segment(export_fie_0, export_int, "isolines_" + Functs::IntString(i) + "_" + Functs::IntString(j), 1.0, 0.0, 0.0, isolines[i][j], isolines[i][(j + 1)], 0.002);
 	//	}
 
 	//}
@@ -5300,7 +5300,7 @@ Vector2d1 GenerateConcavityData(int nb, int period, double max_r, double min_r)
 
 double ComputeGapFromScallop(double surface_curvature, double R_cutter, double scallop)
 {
-	if (Math::IsAlmostZero(surface_curvature))
+	if (Functs::IsAlmostZero(surface_curvature))
 	{
 		return 2.0*sqrt(2.0*scallop*R_cutter / (1.0 + R_cutter*surface_curvature));
 	}
@@ -5363,8 +5363,8 @@ void CGAL_3D_Mesh_Gradient(Vector3d1 &vecs, std::vector<int> &face_id_0, std::ve
 		Vector3d v_1 = vecs[index_1];
 		Vector3d v_2 = vecs[index_2];
 
-		Vector3d   n = Math::GetCrossproduct(v_0 - v_2, v_1 - v_2);
-		Math::SetVectorLength(n, 1.0);
+		Vector3d   n = Functs::GetCrossproduct(v_0 - v_2, v_1 - v_2);
+		Functs::SetVectorLength(n, 1.0);
 
 		double area = CGAL_3D_One_Triangle_Area(v_0, v_1, v_2);
 
@@ -5374,9 +5374,9 @@ void CGAL_3D_Mesh_Gradient(Vector3d1 &vecs, std::vector<int> &face_id_0, std::ve
 		double d_1 = (float)psd[index_1];
 		double d_2 = (float)psd[index_2];
 
-		gradient += (float)psd[index_0] * Math::GetCrossproduct(n, v_2 - v_1);
-		gradient += (float)psd[index_1] * Math::GetCrossproduct(n, v_0 - v_2);
-		gradient += (float)psd[index_2] * Math::GetCrossproduct(n, v_1 - v_0);
+		gradient += (float)psd[index_0] * Functs::GetCrossproduct(n, v_2 - v_1);
+		gradient += (float)psd[index_1] * Functs::GetCrossproduct(n, v_0 - v_2);
+		gradient += (float)psd[index_2] * Functs::GetCrossproduct(n, v_1 - v_0);
 
 		Vector3d face_gradient = gradient / (float)(2.0 * area);
 
@@ -5511,7 +5511,7 @@ void OneIterationSmoothBoundary(Vector3d1 &vecs, std::vector<std::vector<int>> &
 		double d_pre_map = CGAL_3D_Distance_Point_Point(pre_scp, pre_map);
 		double d_next_map = CGAL_3D_Distance_Point_Point(next_scp, next_map);
 
-		if (Math::IsAlmostZero(d_pre_map + d_next_map))
+		if (Functs::IsAlmostZero(d_pre_map + d_next_map))
 			intersections[i] = (float)0.5*pre_map + (float)0.5*next_map;
 		else
 		{
@@ -5767,7 +5767,7 @@ void ComputeRemeshTriangles(const Vector3d1 &vecs,const std::vector<int> &face_i
 		for (int i = 0; i < add_points.size(); i++)
 		{
 			double distance = CGAL_3D_Distance_Point_Point(add_points[i], v);
-			if (Math::IsAlmostZero(distance))
+			if (Functs::IsAlmostZero(distance))
 			{
 				return i;
 			}
@@ -5882,7 +5882,7 @@ void ComputeRemeshTriangles(const Vector3d1 &vecs,const std::vector<int> &face_i
 
 		Vector3d1 points_3d;
 		for (auto &id : nids) points_3d.emplace_back(remesh_points[id]);
-		Vector2d1 points_2d = Math::Vector3d2d(points_3d);
+		Vector2d1 points_2d = Functs::Vector3d2d(points_3d);
 
 		if (!CGAL_2D_Polygon_Simple(points_2d))
 		{
@@ -6067,14 +6067,14 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 			Vector3d edge_1 = PointVector3d(hh_3d->opposite()->vertex()->point());
 
 			double inside_d = CGAL_3D_Distance_Point_Segment(inside, edge_0, edge_1);
-			if (Math::IsAlmostZero(inside_d))
+			if (Functs::IsAlmostZero(inside_d))
 			{
 				result_vecs.emplace_back(inside);
 				result_handles.emplace_back(hh_3d);
 			}
 
 			double outside_d = CGAL_3D_Distance_Point_Segment(outside, edge_0, edge_1);
-			if (Math::IsAlmostZero(outside_d))
+			if (Functs::IsAlmostZero(outside_d))
 			{
 				result_vecs.emplace_back(outside);
 				result_handles.emplace_back(hh_3d);
@@ -6087,7 +6087,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 		Point_3 p2 = hh->next()->vertex()->point();
 		Vector_3 n = CGAL::cross_product(p2 - p1, p0 - p1);
 		Vector3d nd(n.x(), n.y(), n.z());
-		Math::SetVectorLength(nd, 1.0);
+		Functs::SetVectorLength(nd, 1.0);
 		Plane_3 plane(p1, Vector_3(nd[0], nd[1], nd[2]));
 
 		//Point_2 point_to_2d(VectorPoint3d(inside), plane);
@@ -6167,7 +6167,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 				auto vec_1 = full_face_id_1[faces[i]];
 				auto vec_2 = full_face_id_2[faces[i]];
 				auto d = CGAL_3D_Distance_Point_Triangle(query, full_vecs[vec_0], full_vecs[vec_1], full_vecs[vec_2]);
-				if (Math::IsAlmostZero(d))return faces[i];
+				if (Functs::IsAlmostZero(d))return faces[i];
 
 				for (int j = 0; j < surface_vectices_to_face[vec_0].size(); j++)
 				{
@@ -6241,7 +6241,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 				auto vec_1 = full_face_id_1[faces[i]];
 				auto vec_2 = full_face_id_2[faces[i]];
 				auto d = CGAL_3D_Distance_Point_Triangle(query, full_vecs[vec_0], full_vecs[vec_1], full_vecs[vec_2]);
-				//if (Math::IsAlmostZero(d))return faces[i];
+				//if (Functs::IsAlmostZero(d))return faces[i];
 
 				if (d < return_face_d)
 				{
@@ -6306,7 +6306,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 			{
 				Vector3d end_0 = multi_projects[i][j];
 				Vector3d end_1 = multi_projects[i][(j + 1) % multi_projects[i].size()];
-				CGAL_Export_Path_Segment(export_file_output, export_index_0, "projection_" + Math::IntString(i), 1.0, 0.0, 0.0, end_0, end_1, 0.002);
+				CGAL_Export_Path_Segment(export_file_output, export_index_0, "projection_" + Functs::IntString(i), 1.0, 0.0, 0.0, end_0, end_1, 0.002);
 			}
 		}
 		export_file_output.clear();
@@ -6355,9 +6355,9 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 		std::string file_path;
 
 		if (b)
-			file_path = "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\cutting\\cutting_points_" + Math::IntString(iteration) + "_" + Math::IntString(next_index) + "_1.obj";
+			file_path = "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\cutting\\cutting_points_" + Functs::IntString(iteration) + "_" + Functs::IntString(next_index) + "_1.obj";
 		else
-			file_path = "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\cutting\\cutting_points_" + Math::IntString(iteration) + "_" + Math::IntString(next_index) + "_0.obj";
+			file_path = "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\cutting\\cutting_points_" + Functs::IntString(iteration) + "_" + Functs::IntString(next_index) + "_0.obj";
 
 
 		std::ofstream  export_file_output(file_path);
@@ -6367,7 +6367,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 		{
 			Vector3d end_0 = cutting_points[j];
 			Vector3d end_1 = cutting_points[j + 1];
-			CGAL_Export_Path_Segment(export_file_output, export_index, "cutting_points_" + Math::IntString(j), 1.0, 0.0, 0.0, end_0, end_1, 0.05);
+			CGAL_Export_Path_Segment(export_file_output, export_index, "cutting_points_" + Functs::IntString(j), 1.0, 0.0, 0.0, end_0, end_1, 0.05);
 		}
 		//CGAL_Export_Path_Segment(export_file_output, export_index, "inside_outside_segment", 1.0, 0.0, 0.0, inside, multi_projects[i][next_index], 0.01);
 		CGAL_Export_Path_Segment(export_file_output, export_index, "cur_tri_edge", 1.0, 0.0, 0.0, v1, v3, 0.001);
@@ -6395,7 +6395,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 		int export_index = 1;
 		for (int i = 0; i < cutting_points.size() - 1; i++)
 		{
-			CGAL_Export_Path_Segment(export_file_output, export_index, "intersection_" + Math::IntString(i), 1.0, 0.0, 0.0, cutting_points[i], cutting_points[i + 1], 0.05);
+			CGAL_Export_Path_Segment(export_file_output, export_index, "intersection_" + Functs::IntString(i), 1.0, 0.0, 0.0, cutting_points[i], cutting_points[i + 1], 0.05);
 		}
 		export_file_output.clear();
 		export_file_output.close();
@@ -6474,7 +6474,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 		Point_3 p2 = iter->halfedge()->next()->vertex()->point();
 		Vector_3 n = CGAL::cross_product(p2 - p1, p0 - p1);
 		Vector3d nd(n.x(), n.y(), n.z());
-		Math::SetVectorLength(nd, 1.0);
+		Functs::SetVectorLength(nd, 1.0);
 		surface_normals.emplace_back(nd);
 	}
 
@@ -6516,7 +6516,7 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 	if (DebugInformation())
 		AAA("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\projects.obj",multi_projects, multi_project_faces, full_vecs, full_face_id_0, full_face_id_1, full_face_id_2);
 
-	Math::ClearFolder("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\cutting\\");
+	Functs::ClearFolder("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\cutting\\");
 
 	//searching for all of the cutting points on edges
 	Vector3d1 cutting_points;
@@ -6553,9 +6553,9 @@ void CGAL_Cut_Surface_by_Multi_Boundaries(Vector3d2 &multi_boundary, Vector3d in
 				{
 					auto cur_face_normal = surface_normals[cur_face_id];
 					auto next_face_normal = surface_normals[multi_project_faces[i][next_index]->id()];
-					double angle = Math::GetAngleBetween(cur_face_normal, next_face_normal);
+					double angle = Functs::GetAngleBetween(cur_face_normal, next_face_normal);
 
-					if (angle<Math::Math_PI/2.0 && OutsidePointInsideTriangle(cur_face, multi_projects[i][next_index]))
+					if (angle<Functs::Math_PI/2.0 && OutsidePointInsideTriangle(cur_face, multi_projects[i][next_index]))
 					{
 						inside = multi_projects[i][next_index];
 						if (next_index == 0) break;

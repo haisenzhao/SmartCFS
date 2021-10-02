@@ -3,10 +3,10 @@
 #pragma once
 
 #include <stdafx.h>
-#include <MathHelper.h>
+#include "pgl_functs.hpp"
 
-using namespace hpcg;
 using namespace std;
+using namespace PGL;
 
 namespace cnc {
 
@@ -92,12 +92,12 @@ namespace cnc {
 			{
 				d_vector.push_back(input_points_0[i]);
 
-				float d = GetTotalLength(d_vector) / total_length;
+				double d = GetTotalLength(d_vector) / total_length;
 
 				Vector3d p_0 = input_points_0[i];
 				Vector3d p_1 = Strip::GetOnePointFromStrip(d, input_points_1);
 
-				Vector3d new_p = (float)(1.0 - d)*p_0 + d*p_1;
+				Vector3d new_p = (1.0 - d)*p_0 + d*p_1;
 				result.push_back(new_p);
 			}
 			Vector3d1().swap(d_vector);
@@ -140,7 +140,7 @@ namespace cnc {
 				while (true){
 					if (d >= 0 && d < l){
 						double ll = d / l;
-						Vector3d v = (float)(1.0 - ll)*input_points[i] + (float)(ll)*input_points[i + 1];
+						Vector3d v = (1.0 - ll)*input_points[i] + (ll)*input_points[i + 1];
 						output_points.push_back(v);
 						d += delta_length;
 					}
@@ -165,7 +165,7 @@ namespace cnc {
 				while (true){
 					if (d >= 0 && d < l){
 						double ll = d / l;
-						Vector3d v = (float)(1.0 - ll)*input_points[i] + (float)(ll)*input_points[i + 1];
+						Vector3d v = (1.0 - ll)*input_points[i] + (ll)*input_points[i + 1];
 						output_points.push_back(v);
 						new_lables.push_back(lables[i]);
 						d += delta_length;
@@ -269,8 +269,8 @@ namespace cnc {
 				Vector3d v1 = sampling_points[i].v;
 				Vector3d v2 = sampling_points[i + 1].v;
 
-				double angle = getAngleBetween(v0-v1,v2-v1);
-				sampling_points[i].angle = MM_PI - angle;
+				double angle = Functs::GetAngleBetween(v0-v1,v2-v1);
+				sampling_points[i].angle = Math_PI - angle;
 			}
 			sampling_points[0].angle = sampling_points[1].angle;
 			sampling_points[sampling_points.size() - 1].angle = sampling_points[sampling_points.size() - 2].angle;
@@ -373,7 +373,7 @@ namespace cnc {
 					Vector3d v0 = input_points[i - 1];
 					Vector3d v1 = input_points[i];
 					Vector3d v2 = input_points[i + 1];
-					v1 = (v0 + v1 + v2)/(float)3.0;
+					v1 = (v0 + v1 + v2)/3.0;
 					temp.push_back(v1);
 				}
 
@@ -398,10 +398,10 @@ namespace cnc {
 					Vector3d v0 = input_points[i - 1];
 					Vector3d v1 = input_points[i];
 					Vector3d v2 = input_points[i + 1];
-					double angle = getAngleBetween(v1-v0,v2-v1);
-					angle = angle / MM_PI*180.0;
-					Vector3d v = (v0 + v1 + v2) / (float)3.0;
-					double d = getLength(v - original_input_points[i]);
+					double angle = Functs::GetAngleBetween(v1-v0,v2-v1);
+					angle = angle / Math_PI*180.0;
+					Vector3d v = (v0 + v1 + v2) / 3.0;
+					double d = Functs::GetLength(v - original_input_points[i]);
 
 					if (angle >= smallest_angle&&d <= chord_error)
 					{
@@ -435,7 +435,7 @@ namespace cnc {
 				Vector3d v0 = input_points[i - 1];
 				Vector3d v1 = input_points[i];
 				Vector3d v2 = input_points[i+1];
-				double angle = getAngleBetween(v0-v1,v2-v1);
+				double angle = Functs::GetAngleBetween(v0-v1,v2-v1);
 				total_angle += angle;
 			}
 			return total_angle;
@@ -455,10 +455,10 @@ namespace cnc {
 				Vector3d v0 = input_points[input_points.size() - 2];
 				Vector3d v1 = input_points[input_points.size() - 1];
 				Vector3d v2 = temp[i];
-				double angle = getAngleBetween(v1-v0,v2-v1);
-				angle = angle / MM_PI*180.0;
+				double angle = Functs::GetAngleBetween(v1-v0,v2-v1);
+				angle = angle / Math_PI*180.0;
 
-				if (isAlmostZero(angle))
+				if (Functs::IsAlmostZero(angle))
 				{
 					input_points.erase(input_points.begin()+input_points.size()-1);
 				}

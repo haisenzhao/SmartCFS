@@ -258,7 +258,7 @@ void CGAL_Rotation_Obj(std::string path, double angle, Vector3d axis)
 	CGAL_3D_Read_Triangle_Mesh(path, vecs, face_id_0, face_id_1, face_id_2);
 	for (int i = 0; i < vecs.size(); i++)
 	{
-		Vector3d v = Math::RotationAxis(vecs[i], angle, axis);
+		Vector3d v = Functs::RotationAxis(vecs[i], angle, axis);
 		vecs[i] = v;
 	}
 	CGAL_Output_Obj(path, vecs, face_id_0, face_id_1, face_id_2);
@@ -279,8 +279,8 @@ void CGAL_Export_Path_Segment(std::ofstream &export_file_output, int &export_ind
 
 	for (int i = 0; i < 4; i++)
 	{
-		double angle = i * 2 * Math::Math_PI / 4;
-		Vector3d v = Math::RotationAxis(normal + base_1, angle, normal);
+		double angle = i * 2 * Math_PI / 4;
+		Vector3d v = Functs::RotationAxis(normal + base_1, angle, normal);
 		vecs.push_back(v + start);
 	}
 	for (int i = 0; i < 4; i++)

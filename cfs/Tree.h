@@ -3,15 +3,16 @@
 #pragma once
 
 #include <stdafx.h>
-#include <MathHelper.h>
+#include "pgl_functs.hpp"
 
 #include <Strip.h>
 #include <Circuit.h>
 
 #include "kdtree.h"
 
-using namespace hpcg;
 using namespace std;
+using namespace PGL;
+
 
 namespace cnc {
 
@@ -373,11 +374,11 @@ namespace cnc {
 						Vector3d p_1 = part[j];
 						Vector3d p_2 = part[j + 1];
 
-						if (!isAlmostZero(getLength(p_1 - p_0)) && !isAlmostZero(getLength(p_2 - p_1)))
+						if (!Functs::IsAlmostZero(Functs::GetLength(p_1 - p_0)) && !Functs::IsAlmostZero(Functs::GetLength(p_2 - p_1)))
 						{
-							double angle = getAngleBetween(p_1 - p_0, p_2 - p_1);
+							double angle = Functs::GetAngleBetween(p_1 - p_0, p_2 - p_1);
 
-							if (angle > MM_PI / 2.0)
+							if (angle > Math_PI / 2.0)
 							{
 								index.push_back(j);
 							}
@@ -533,18 +534,18 @@ namespace cnc {
 						bool b0 = GetSharingParts1(toolpath_size, offsets[upper_index], offsets[lower_index], sharing_parts_0);
 						bool b1 = GetSharingParts1(toolpath_size, offsets[lower_index], offsets[upper_index], sharing_parts_1);
 
-						if (MyGetUserName() == "debug")
+						if (Functs::MyGetUserName() == "debug")
 						{
 							if ((upper_index == 30 && lower_index == 32) || (lower_index == 30 && upper_index == 32))
 							{
-								std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\sharingpart_" + IntString(upper_index) + "_" + IntString(lower_index) + ".obj");
+								std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\sharingpart_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index) + ".obj");
 								int debug_index = 1;
 
 								for (int i = 0; i < sharing_parts_0.size(); i++)
 								{
 									for (int j = 0; j < sharing_parts_0[i].size() - 1; j++)
 									{
-										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_0_" + IntString(upper_index) + "_" + IntString(lower_index), 1.0, 0.0, 0.0,
+										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_0_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index), 1.0, 0.0, 0.0,
 											sharing_parts_0[i][j], sharing_parts_0[i][j + 1], 0.1);
 									}
 								}
@@ -552,7 +553,7 @@ namespace cnc {
 								{
 									for (int j = 0; j < sharing_parts_1[i].size() - 1; j++)
 									{
-										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_1_" + IntString(upper_index) + "_" + IntString(lower_index), 1.0, 0.0, 0.0,
+										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_1_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index), 1.0, 0.0, 0.0,
 											sharing_parts_1[i][j], sharing_parts_1[i][j + 1], 0.1);
 									}
 								}
@@ -642,14 +643,14 @@ namespace cnc {
 						{
 							if ((upper_index == 30 && lower_index == 32) || (lower_index == 30 && upper_index == 32))
 							{
-								std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\sharingpart_" + IntString(upper_index) + "_" + IntString(lower_index) + ".obj");
+								std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\sharingpart_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index) + ".obj");
 								int debug_index = 1;
 
 								for (int i = 0; i < sharing_parts_0.size(); i++)
 								{
 									for (int j = 0; j < sharing_parts_0[i].size() - 1; j++)
 									{
-										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_0_" + IntString(upper_index) + "_" + IntString(lower_index), 1.0, 0.0, 0.0,
+										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_0_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index), 1.0, 0.0, 0.0,
 											sharing_parts_0[i][j], sharing_parts_0[i][j + 1], 0.1);
 									}
 								}
@@ -657,7 +658,7 @@ namespace cnc {
 								{
 									for (int j = 0; j < sharing_parts_1[i].size() - 1; j++)
 									{
-										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_1_" + IntString(upper_index) + "_" + IntString(lower_index), 1.0, 0.0, 0.0,
+										CGAL_Export_Path_Segment(debug_file, debug_index, "debug_1_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index), 1.0, 0.0, 0.0,
 											sharing_parts_1[i][j], sharing_parts_1[i][j + 1], 0.1);
 									}
 								}

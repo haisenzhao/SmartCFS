@@ -73,7 +73,7 @@ namespace cnc {
 		Vector3d1 base_vertices_max_cur_direction;
 		Vector3d1 base_vertices_min_cur_direction;
 
-		CGAL_Curvature_Mesh(input_path + "\\" + IntString(cfs_index) + "_full.off",
+		CGAL_Curvature_Mesh(input_path + "\\" + Functs::IntString(cfs_index) + "_full.off",
 			heat_surface_vertices, base_vertices_max_cur, base_vertices_min_cur, base_vertices_max_cur_direction, base_vertices_min_cur_direction);
 
 		std::ofstream file(out_path);
@@ -147,12 +147,12 @@ namespace cnc {
 		Vector3d1 max_curvature_directions;
 		Vector3d1 min_curvature_directions;
 
-		CGAL_3D_Read_Triangle_Mesh(input_path + "\\path\\" + IntString(cfs_index) + "_split.obj", surface_vertices, surface_faces);
+		CGAL_3D_Read_Triangle_Mesh(input_path + "\\path\\" + Functs::IntString(cfs_index) + "_split.obj", surface_vertices, surface_faces);
 		//CGAL_3D_Mesh_Curvature(surface_vertices, surface_faces, surface_vectices_max_curs, surface_vectices_min_curs, max_curvature_directions, min_curvature_directions, surface_vertices_normal);
 
-		CGAL_Curvature_Mesh(input_path + "\\" + IntString(cfs_index) + "_full.off",
+		CGAL_Curvature_Mesh(input_path + "\\" + Functs::IntString(cfs_index) + "_full.off",
 			surface_vertices, surface_vectices_max_curs, surface_vectices_min_curs, max_curvature_directions, min_curvature_directions);
-		CGAL_Normal_Mesh(input_path + "\\" + IntString(cfs_index) + "_full.off",
+		CGAL_Normal_Mesh(input_path + "\\" + Functs::IntString(cfs_index) + "_full.off",
 			surface_vertices, surface_vertices_normal);
 
 		std::ofstream file(path);
@@ -175,10 +175,10 @@ namespace cnc {
 
 	void CFSCNC::Output_Path_with_Normal(std::string path)
 	{
-		std::cout << input_path + "\\" + IntString(cfs_index) + ".off" << std::endl;
+		std::cout << input_path + "\\" + Functs::IntString(cfs_index) + ".off" << std::endl;
 
 		Vector3d1 normals;
-		CGAL_Normal_Mesh(input_path + "\\" + IntString(cfs_index) + "_full.off", single_final_path, normals);
+		CGAL_Normal_Mesh(input_path + "\\" + Functs::IntString(cfs_index) + "_full.off", single_final_path, normals);
 
 		int index = -1;
 		double max_y = -100000.0;
@@ -189,7 +189,7 @@ namespace cnc {
 				max_y = single_final_path[i][1];
 				index = i;
 			}
-			Vector3d n = single_final_path[i] + SetVectorLength(normals[i],2.0)+Vector3d(0.0,-2.0,0.0);
+			Vector3d n = single_final_path[i] + Functs::SetVectorLength(normals[i], 2.0) + Vector3d(0.0, -2.0, 0.0);
 		}
 
 		index = 0;
@@ -267,9 +267,9 @@ namespace cnc {
 		//single_final_path_RMDF_normal
 		for (int i = 0; i < single_final_path.size() - 1; i++)
 		{
-			Vector3d n = getCrossproduct(single_final_path_normal[i], single_final_path[i + 1] - single_final_path[i]);
+			Vector3d n = Functs::GetCrossproduct(single_final_path_normal[i], single_final_path[i + 1] - single_final_path[i]);
 			//	inline Vector3d RotationAxis(Vector3d p, double angle, Vector3d n)
-			single_final_path_RMDF_normal.push_back(RotationAxis(single_final_path_normal[i], MM_PI / 10, n));
+			single_final_path_RMDF_normal.push_back(RotationAxis(single_final_path_normal[i], Math_PI / 10, n));
 		}
 		single_final_path_RMDF_normal.push_back(single_final_path_normal[single_final_path_normal.size() - 1]);
 
@@ -282,10 +282,10 @@ namespace cnc {
 		for (int i = 0; i < single_final_path.size(); i++)
 		{
 			Vector3d surface_normal = single_final_path_normal[i];
-			SetVectorLength(surface_normal, 2.0);
+			Functs::SetVectorLength(surface_normal, 2.0);
 
 			Vector3d drill_orientation = single_final_path_RMDF_normal[i];
-			SetVectorLength(drill_orientation, 2.0);
+			Functs::SetVectorLength(drill_orientation, 2.0);
 
 			Vector3d center = single_final_path[i] - surface_normal + drill_orientation;
 			single_final_CL_path.push_back(center);
@@ -308,7 +308,7 @@ namespace cnc {
 		file.clear();
 		file.close();
 
-		//getCrossproduct
+		//Functs::GetCrossproduct
 	}
 
 
@@ -640,12 +640,12 @@ namespace cnc {
 					string com_isoline = "";
 					com_isoline += "D:\\task2\\CNC\\step_2_1_compute_isolines\\x64\\Release\\isoline.exe";
 					com_isoline += " ";
-					com_isoline += input_path + "\\path\\" + IntString(cfs_index) + "_heat_sub_split.obj";
+					com_isoline += input_path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub_split.obj";
 					com_isoline += " ";
 					//com_isoline += DoubleString(max_scallop*3.5);
-					com_isoline += DoubleString(max_scallop);
+					com_isoline += Functs::DoubleString(max_scallop);
 					com_isoline += " ";
-					com_isoline += DoubleString(drill_radius);
+					com_isoline += Functs::DoubleString(drill_radius);
 					com_isoline += " ";
 					com_isoline += input_path + "\\path\\heat.dist";
 					com_isoline += " ";
@@ -687,7 +687,7 @@ namespace cnc {
 			{
 				if (!std::ifstream(input_path + "\\path\\heat.offsets", std::ios::in))
 				{
-					Extract_ISOContours_From_Heat(input_path + "\\path\\" + IntString(cfs_index) + "_heat_sub_split.obj",
+					Extract_ISOContours_From_Heat(input_path + "\\path\\" + Functs::IntString(cfs_index) + "_heat_sub_split.obj",
 						input_path + "\\path\\heat.dist", dists, offsets);
 
 					Vector3d2 offsets0 = offsets;
@@ -735,7 +735,7 @@ namespace cnc {
 		else{
 
 			std::vector<string> offsets_files;
-			LoadOffsetsFiles(offsets_files, input_path + "\\path\\" + IntString(cfs_index) + ".offsets_path");
+			LoadOffsetsFiles(offsets_files, input_path + "\\path\\" + Functs::IntString(cfs_index) + ".offsets_path");
 
 			for (int iter = 0; iter < offsets_files.size(); iter++){
 				string path = offsets_files[iter];
@@ -908,7 +908,7 @@ namespace cnc {
 
 		for (int i = 0; i < nb; i++)
 		{
-			double angle = (double)i / (double)nb*MM_PI*2.0;
+			double angle = (double)i / (double)nb*Math_PI*2.0;
 
 			double r = (cos(angle*period) + 1.0) / 2.0*(max_r - min_r) + min_r;
 
@@ -1076,8 +1076,8 @@ namespace cnc {
 			Vector3d v_1 = vecs[index_1];
 			Vector3d v_2 = vecs[index_2];
 
-			Vector3d   n = Math::GetCrossproduct(v_0 - v_2, v_1 - v_2);
-			Math::SetVectorLength(n, 1.0);
+			Vector3d   n = Functs::GetCrossproduct(v_0 - v_2, v_1 - v_2);
+			Functs::SetVectorLength(n, 1.0);
 
 			double area = CGAL_3D_One_Triangle_Area(v_0, v_1, v_2);
 
@@ -1087,9 +1087,9 @@ namespace cnc {
 			double d_1 = (float)dists[index_1];
 			double d_2 = (float)dists[index_2];
 
-			gradient += (float)dists[index_0] * Math::GetCrossproduct(n, v_2 - v_1);
-			gradient += (float)dists[index_1] * Math::GetCrossproduct(n, v_0 - v_2);
-			gradient += (float)dists[index_2] * Math::GetCrossproduct(n, v_1 - v_0);
+			gradient += (float)dists[index_0] * Functs::GetCrossproduct(n, v_2 - v_1);
+			gradient += (float)dists[index_1] * Functs::GetCrossproduct(n, v_0 - v_2);
+			gradient += (float)dists[index_2] * Functs::GetCrossproduct(n, v_1 - v_0);
 
 			gradient = gradient / (float)(2.0 * area);
 
@@ -1106,8 +1106,8 @@ namespace cnc {
 			areas[index_2] += area;
 
 			//Vector3d middle = (v_0 + v_1 + v_2) / (float)3.0;
-			//Math::SetVectorLength(gradient,0.3);
-			//CGAL_Export_Path_Segment(export_fie,export_int,"name_"+Math::IntString(i),1.0,0.0,0.0,middle,middle+gradient,0.02);
+			//Functs::SetVectorLength(gradient,0.3);
+			//CGAL_Export_Path_Segment(export_fie,export_int,"name_"+Functs::IntString(i),1.0,0.0,0.0,middle,middle+gradient,0.02);
 		}
 
 		std::vector<double> base_vertices_max_cur;
@@ -1154,24 +1154,24 @@ namespace cnc {
 		{
 			vecs_gradients[i] = vecs_gradients[i] / (float)areas[i];
 
-			//Math::SetVectorLength(vecs_gradients[i], 0.3);
-			//CGAL_Export_Path_Segment(export_fie, export_int, "name_" + Math::IntString(i), 1.0, 0.0, 0.0, vecs[i], vecs[i] + vecs_gradients[i], 0.02);
+			//Functs::SetVectorLength(vecs_gradients[i], 0.3);
+			//CGAL_Export_Path_Segment(export_fie, export_int, "name_" + Functs::IntString(i), 1.0, 0.0, 0.0, vecs[i], vecs[i] + vecs_gradients[i], 0.02);
 
 			double min_cur = base_vertices_min_cur[i];
 			double max_cur = base_vertices_max_cur[i];
 			Vector3d min_cur_dir = base_vertices_min_cur_direction[i];
 			Vector3d max_cur_dir = base_vertices_max_cur_direction[i];
 
-			double max_angle = Math::GetAngleBetween(max_cur_dir, vecs_gradients[i]);
-			double min_angle = Math::GetAngleBetween(min_cur_dir, vecs_gradients[i]);
+			double max_angle = Functs::GetAngleBetween(max_cur_dir, vecs_gradients[i]);
+			double min_angle = Functs::GetAngleBetween(min_cur_dir, vecs_gradients[i]);
 
-			Math::SetVectorLength(min_cur_dir, 0.3);
-			Math::SetVectorLength(max_cur_dir, 0.3);
+			Functs::SetVectorLength(min_cur_dir, 0.3);
+			Functs::SetVectorLength(max_cur_dir, 0.3);
 
-			if (max_angle > MM_PI / 2.0) max_angle = MM_PI - max_angle;
-			if (min_angle >MM_PI / 2.0) min_angle = MM_PI - min_angle;
+			if (max_angle > Math_PI / 2.0) max_angle = Math_PI - max_angle;
+			if (min_angle >Math_PI / 2.0) min_angle = Math_PI - min_angle;
 
-			vecs_gradients_value[i] = (1.0 - max_angle / (MM_PI / 2.0))*max_cur + (1.0 - min_angle / (MM_PI / 2.0))*min_cur;
+			vecs_gradients_value[i] = (1.0 - max_angle / (Math_PI / 2.0))*max_cur + (1.0 - min_angle / (Math_PI / 2.0))*min_cur;
 
 			if (vecs_gradients_value[i] < 0)
 			{
@@ -1187,7 +1187,7 @@ namespace cnc {
 		std::cout << "Concave Nb: " << concave_nb << std::endl;
 
 		std::ofstream ofile(scale_path);
-		ofile << Math::IntString(vecs.size()) << std::endl;
+		ofile << Functs::IntString(vecs.size()) << std::endl;
 
 		double flat_width = ComputeGapFromScallop(0.0, 2.0, max_scallop);
 		Vector3d1 colors;
@@ -1220,7 +1220,7 @@ namespace cnc {
 
 			double r, g, b;
 			double d = (scales[i] - 0.28) / (1.0 - 0.28);
-			Math::ColorMapping(d, r, g, b);
+			Functs::ColorMapping(d, r, g, b);
 			//colors.push_back(Vector3d(r, g, b));
 
 			if (scales[i]>1.0)

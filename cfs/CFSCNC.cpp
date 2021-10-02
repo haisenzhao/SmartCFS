@@ -32,7 +32,7 @@ typedef CGAL::AABB_tree<Traits_poly> AABB_Tree;
 typedef AABB_Tree::Point_and_primitive_id Point_and_primitive_id;
 typedef boost::optional<AABB_Tree::Intersection_and_primitive_id<Ray_3>::Type> Ray_intersection;
 
-using namespace hpcg;
+using namespace PGL;
 
 namespace cnc {
 
@@ -126,7 +126,7 @@ namespace cnc {
 
 		if (offsets.size() == 1) single_path = offsets[0];
 
-		if (!std::ifstream(input_path + "path\\" + IntString(cfs_index) + ".path", std::ios::in) || re_running)
+		if (!std::ifstream(input_path + "path\\" + Functs::IntString(cfs_index) + ".path", std::ios::in) || re_running)
 		{
 			//build offset graph
 			//Assign edge weight
@@ -136,13 +136,13 @@ namespace cnc {
 			//debug
 			for (int i = 0; i < offset_graph_sharing_parts_no_par.size(); i++)
 			{
-				//OutputStrips(path + "debug\\sharing_" + IntString(i) + ".obj", offset_graph_sharing_parts_no_par[i]);
+				//OutputStrips(path + "debug\\sharing_" + Functs::IntString(i) + ".obj", offset_graph_sharing_parts_no_par[i]);
 			}
 
 			//minimal spanning tree
 			Tree::MinimalSpanningTree(offsets, offset_graph, parts_length, mst);
-			Output_tree(offsets.size(), offset_graph, path+"path\\1.gml");
-			Output_tree(offsets.size(), mst, path + "path\\2.gml");
+			Functs::Output_tree(offsets.size(), offset_graph, path+"path\\1.gml");
+			Functs::Output_tree(offsets.size(), mst, path + "path\\2.gml");
 
 			//input nodes and edges
 			InputDataStructure(offsetses, offset_graph_sharing_parts_no_par, mst, offset_graph);
@@ -165,12 +165,12 @@ namespace cnc {
 						if (GetOneSinglePath_0())
 						{
 							/*Vector3d1 vecs;
-							CGAL_3D_Neareast_Point_Mesh(path + "\\" + IntString(cfs_index) + ".off", single_path, vecs);
+							CGAL_3D_Neareast_Point_Mesh(path + "\\" + Functs::IntString(cfs_index) + ".off", single_path, vecs);
 							Vector3d1().swap(single_path);
 							single_path = vecs;
 							Vector3d1().swap(vecs);
-							Output_Path(input_path + "\\path\\" + IntString(cfs_index) + ".path");
-							Output_Obj_Cur_Normals(input_path + "\\path\\" + IntString(cfs_index) + "_normals_curs.data");*/
+							Output_Path(input_path + "\\path\\" + Functs::IntString(cfs_index) + ".path");
+							Output_Obj_Cur_Normals(input_path + "\\path\\" + Functs::IntString(cfs_index) + "_normals_curs.data");*/
 						}
 						else
 						{
@@ -193,8 +193,8 @@ namespace cnc {
 					if (false)
 					if (fermat_success)
 					{
-						Output_Path(input_path + "\\path\\" + IntString(cfs_index) + ".path");
-						Output_Obj_Cur_Normals(input_path + "\\path\\" + IntString(cfs_index) + "_normals_curs.data");
+						Output_Path(input_path + "\\path\\" + Functs::IntString(cfs_index) + ".path");
+						Output_Obj_Cur_Normals(input_path + "\\path\\" + Functs::IntString(cfs_index) + "_normals_curs.data");
 					}
 				}
 			}
@@ -211,22 +211,22 @@ namespace cnc {
 				{
 					/*
 					Vector3d1 vecs;
-					CGAL_3D_Neareast_Point_Mesh(path + "\\" + IntString(cfs_index) + ".off", single_path, vecs);
+					CGAL_3D_Neareast_Point_Mesh(path + "\\" + Functs::IntString(cfs_index) + ".off", single_path, vecs);
 					Vector3d1().swap(single_path);
 					single_path = vecs;
 					Vector3d1().swap(vecs);
 					*/
 
-					//OutputOffsets(input_path + "\\path\\" + IntString(cfs_index) + ".obj", single_path);
+					//OutputOffsets(input_path + "\\path\\" + Functs::IntString(cfs_index) + ".obj", single_path);
 
-					//Output_Path(input_path + "\\path\\" + IntString(cfs_index) + ".path");
-					//Output_Obj_Cur_Normals(input_path + "\\path\\" + IntString(cfs_index) + "_normals_curs.data");
+					//Output_Path(input_path + "\\path\\" + Functs::IntString(cfs_index) + ".path");
+					//Output_Obj_Cur_Normals(input_path + "\\path\\" + Functs::IntString(cfs_index) + "_normals_curs.data");
 				}
 			}
 
 			single_paths.push_back(single_path);
 			std::ofstream file("D:\\CNCProduction\\Release\\path_optimization_usage_shiqing\\filelist.txt");
-			file << path +"\\path\\"+ IntString(cfs_index) + "_split.obj" << std::endl;
+			file << path + "\\path\\" + Functs::IntString(cfs_index) + "_split.obj" << std::endl;
 			file.clear();
 			file.close();
 
@@ -235,7 +235,7 @@ namespace cnc {
 		}
 		else
 		{
-			Load_Path(input_path + "\\path\\" + IntString(cfs_index) + ".path");
+			Load_Path(input_path + "\\path\\" + Functs::IntString(cfs_index) + ".path");
 			single_paths.push_back(single_path);
 		}
 
@@ -271,10 +271,10 @@ namespace cnc {
 
 			if (pos_x >= 0 && pos_y >= 0 && pos_z >= 0&&pos_a<0)
 			{
-				string x = line.substr(pos_x + 1, pos_y-pos_x-1);
-				string y = line.substr(pos_y+1, pos_z-pos_y-1);
-				string z = line.substr(pos_z+1, line.size()-pos_z-1);
-				single_final_path.push_back(Vector3d(StringToNum<float>(x), StringToNum<float>(y), StringToNum<float>(z)));
+				string x = line.substr(pos_x + 1, pos_y - pos_x - 1);
+				string y = line.substr(pos_y + 1, pos_z - pos_y - 1);
+				string z = line.substr(pos_z + 1, line.size() - pos_z - 1);
+				single_final_path.push_back(Vector3d(Functs::StringToNum<double>(x), Functs::StringToNum<double>(y), Functs::StringToNum<double>(z)));
 			}
 
 			if (pos_x >= 0 && pos_y >= 0 && pos_z >= 0 && pos_a>=0)
@@ -282,7 +282,7 @@ namespace cnc {
 				string x = line.substr(pos_x + 1, pos_y - pos_x - 1);
 				string y = line.substr(pos_y + 1, pos_z - pos_y - 1);
 				string z = line.substr(pos_z + 1, pos_a - pos_z - 1);
-				single_final_path.push_back(Vector3d(StringToNum<float>(x), StringToNum<float>(y), StringToNum<float>(z)));
+				single_final_path.push_back(Vector3d(Functs::StringToNum<double>(x), Functs::StringToNum<double>(y), Functs::StringToNum<double>(z)));
 			}
 		}
 
@@ -311,9 +311,9 @@ namespace cnc {
 				string str_y = line.substr(pos_y + 1, pos_z - pos_y - 1);
 				string str_z = line.substr(pos_z + 1, line.size() - pos_z - 1);
 				
-				r_x = StringToNum<float>(str_x);
-				r_y = StringToNum<float>(str_y);
-				r_z = StringToNum<float>(str_z);
+				r_x = Functs::StringToNum<float>(str_x);
+				r_y = Functs::StringToNum<float>(str_y);
+				r_z = Functs::StringToNum<float>(str_z);
 				b = true;
 			}
 
@@ -321,15 +321,15 @@ namespace cnc {
 			{
 				string str_x = line.substr(pos_x + 1, pos_z - pos_x - 1);
 				string str_z = line.substr(pos_z + 1, line.size() - pos_z - 1);
-				r_x = StringToNum<float>(str_x);
-				r_z = StringToNum<float>(str_z);
+				r_x = Functs::StringToNum<float>(str_x);
+				r_z = Functs::StringToNum<float>(str_z);
 				b = true;
 			}
 
 			if (pos_x >= 0 && pos_y < 0 && pos_z < 0)
 			{
 				string str_x = line.substr(pos_x + 1, line.size() - pos_x - 1);
-				r_x = StringToNum<float>(str_x);
+				r_x = Functs::StringToNum<float>(str_x);
 				b = true;
 			}
 			
@@ -374,9 +374,9 @@ namespace cnc {
 				string str_1 = str.substr(pos_0 + 1, pos_1 - pos_0-1);
 				string str_2 = str.substr(pos_1+1);
 
-				r_x = StringToNum<float>(str_0);
-				r_y = StringToNum<float>(str_1);
-				r_z = StringToNum<float>(str_2);
+				r_x = Functs::StringToNum<float>(str_0);
+				r_y = Functs::StringToNum<float>(str_1);
+				r_z = Functs::StringToNum<float>(str_2);
 
 				single_final_path.push_back(Vector3d(r_x, r_y, r_z));
 			}
@@ -419,7 +419,7 @@ namespace cnc {
 
 	double CFSCNC::InterferenceOneRayDistance(Vector3d v, Vector3d n)
 	{
-		SetVectorLength(n, 5.0);
+		Functs::SetVectorLength(n, 5.0);
 		Ray_3 ray(Point_3(v[0], v[1], v[2]), Vector_3(n[0], n[1], n[2]));
 
 		Ray_intersection intersection = machining_shape_tree_0.any_intersection(ray);
@@ -432,7 +432,7 @@ namespace cnc {
 				double d1 = (*p)[1];
 				double d2 = (*p)[2];
 
-				return getLength(Vector3d(d0, d1, d2) - v);
+				return Functs::GetLength(Vector3d(d0, d1, d2) - v);
 			}
 		}
 		return -1;
@@ -442,7 +442,7 @@ namespace cnc {
 	{
 		Point_3 p(v[0], v[1], v[2]);
 		Point_3 closest_point = machining_shape_tree_0.closest_point(p);
-		return getLength(Vector3d(closest_point[0], closest_point[1], closest_point[2]) - v);
+		return Functs::GetLength(Vector3d(closest_point[0], closest_point[1], closest_point[2]) - v);
 	}
 
 	void CFSCNC::ShowZigzag3(std::string  path)
@@ -583,14 +583,14 @@ namespace cnc {
 		std::ofstream file(scallop_map_path);
 
 		double arv_r, arv_g, arv_b;
-		ColorMapping(0.5, arv_r, arv_g, arv_b);
+		Functs::ColorMapping(0.5, arv_r, arv_g, arv_b);
 
 		for (int i = 0; i < surface_vertices.size(); i++)
 		{
 			double d = (height[i] - min_d) / (max_d - min_d);
 			double r, g, b;
 
-			ColorMapping(d, r, g, b);
+			Functs::ColorMapping(d, r, g, b);
 			//file << "v " << surface_vertices[i][0] << " " << surface_vertices[i][1] << " " << surface_vertices[i][2] << std::endl;
 
 		/*	if (height[i]>0.10)
@@ -622,7 +622,7 @@ namespace cnc {
 	{
 		double gap = 0.0;
 
-		if (isAlmostZero(surface_curvature))
+		if (Functs::IsAlmostZero(surface_curvature))
 		{
 			gap= 2.0*sqrt(2.0*scallop*R_cutter / (1.0 + R_cutter*surface_curvature));
 		}
@@ -657,9 +657,9 @@ namespace cnc {
 		double dddd1 = Strip::Distance(one, center);
 		double dddd2 = Strip::Distance(CC, center);
 
-		double angle = getAngleBetween(one-CC,center-CC);
+		double angle = Functs::GetAngleBetween(one-CC,center-CC);
 
-		angle=angle*180.0 / MM_PI;
+		angle=angle*180.0 / Math_PI;
 		//scallop base mesh
 		/****************************************************************************************************************/
 
@@ -699,7 +699,7 @@ namespace cnc {
 		
 		if (false)
 		{
-			if (!Load_Final_Path(path + "\\path\\" + IntString(cfs_index) + "_final.path"))
+			if (!Load_Final_Path(path + "\\path\\" + Functs::IntString(cfs_index) + "_final.path"))
 			{
 				return;
 			}
@@ -708,7 +708,7 @@ namespace cnc {
 
 			for (int i = 0; i < single_final_path.size(); i++)
 			{
-				SetVectorLength(normals[i], 2.0);
+				Functs::SetVectorLength(normals[i], 2.0);
 				sphere_centers.push_back(single_final_path[i] + normals[i]);
 			}
 			single_final_path = sphere_centers;
@@ -978,13 +978,13 @@ void CFSCNC::ScallopHeightSimulation(Vector3d2 &cc_pathes, std::string base_mesh
 			d = (height[i] + 0.045) / 0.045*0.5;
 		}
 
-		if (isAlmostZero(height[i])) d = 0.5;
+		if (Functs::IsAlmostZero(height[i])) d = 0.5;
 
 		file_out << i << " " << height[i] << " " << d << std::endl;
 
 		if (d < 0.5) d = 0.5;
 
-		ColorMapping(d, r, g, b);
+		Functs::ColorMapping(d, r, g, b);
 		colors.push_back(Vector3d(r, g, b));
 	}
 
@@ -1096,7 +1096,7 @@ void CFSCNC::ShowScallopComputation()
 		}
 
 		double r, g, b;
-		ColorMapping(d, r, g, b);
+		Functs::ColorMapping(d, r, g, b);
 		colors.push_back(Vector3d(r,g,b));
 	}
 	CGAL_Output_Obj(scallop_map_path, base_vertices,colors, base_face_id_0, base_face_id_1, base_face_id_2);
@@ -1128,7 +1128,7 @@ void CFSCNC::ShowScallopComputation()
 			double_line += sub_line;
 		}
 
-		return  StringToNum<double>(double_line);
+		return  Functs::StringToNum<double>(double_line);
 	}
 
 #if 1
@@ -1161,7 +1161,7 @@ void CFSCNC::ShowScallopComputation()
 			Vector3d v1 = single_final_path[(j - 1 + single_final_path.size()) % single_final_path.size()];
 			Vector3d v2 = single_final_path[(j + 1 + single_final_path.size()) % single_final_path.size()];
 
-			double angle = getAngleBetween(v0 - v1, v2 - v0);
+			double angle = Functs::GetAngleBetween(v0 - v1, v2 - v0);
 			total_angle += angle;
 		}
 
@@ -1170,8 +1170,8 @@ void CFSCNC::ShowScallopComputation()
 		std::ofstream out("G://obj_angle.stat");
 		for (int i = 1; i < single_final_path.size() - 1; i++)
 		{
-			double angle = getAngleBetween(single_final_path[i] - single_final_path[i - 1], single_final_path[i + 1] - single_final_path[i]);
-			angle = angle / MM_PI*180.0;
+			double angle = Functs::GetAngleBetween(single_final_path[i] - single_final_path[i - 1], single_final_path[i + 1] - single_final_path[i]);
+			angle = angle / Math_PI*180.0;
 			out << angle << std::endl;
 		}
 		out.close();
@@ -1196,25 +1196,25 @@ void CFSCNC::ShowScallopComputation()
 	{
 		Vector2d1 cnc_2d_path;
 		cnc_2d_path.push_back(Vector2d(0.0, 0.0));
-		double length = getLength(cnc_3d_path[1] - cnc_3d_path[0]);
+		double length = Functs::GetLength(cnc_3d_path[1] - cnc_3d_path[0]);
 		cnc_2d_path.push_back(Vector2d(length, 0.0));
 		for (int i = 2; i < cnc_3d_path.size(); i++)
 		{
 			Vector3d v0 = cnc_3d_path[i - 2];
 			Vector3d v1 = cnc_3d_path[i - 1];
 			Vector3d v2 = cnc_3d_path[i];
-			double angle = getAngleBetween(v0 - v1, v2 - v1);
-			length = getLength(v2 - v1);
+			double angle = Functs::GetAngleBetween(v0 - v1, v2 - v1);
+			length = Functs::GetLength(v2 - v1);
 			Vector2d last_2d_v_0 = cnc_2d_path[cnc_2d_path.size() - 2];
 			Vector2d last_2d_v_1 = cnc_2d_path[cnc_2d_path.size() - 1];
 			Vector3d last_3d_v_0(last_2d_v_0[0], last_2d_v_0[1], 0.0);
 			Vector3d last_3d_v_1(last_2d_v_1[0], last_2d_v_1[1], 0.0);
-			Vector3d v = -SetVectorLength(last_3d_v_1 - last_3d_v_0, length);
-			Vector3d rotate_v = RotationAxis(v, angle, Vector3d(0.0, 0.0, 1.0));
+			Vector3d v = -Functs::SetVectorLength(last_3d_v_1 - last_3d_v_0, length);
+			Vector3d rotate_v = Functs::RotationAxis(v, angle, Vector3d(0.0, 0.0, 1.0));
 			rotate_v = rotate_v + last_3d_v_1;
 			cnc_2d_path.push_back(Vector2d(rotate_v[0], rotate_v[1]));
-			double angle_0 = getAngleBetween(rotate_v - last_3d_v_1, last_3d_v_0 - last_3d_v_1);
-			double length_0 = getLength(rotate_v - last_3d_v_1);
+			double angle_0 = Functs::GetAngleBetween(rotate_v - last_3d_v_1, last_3d_v_0 - last_3d_v_1);
+			double length_0 = Functs::GetLength(rotate_v - last_3d_v_1);
 		}
 
 		return cnc_2d_path;
@@ -1363,11 +1363,11 @@ void CFSCNC::ShowScallopComputation()
 
 		input_path = path;
 
-		Load_Path(path + "\\path\\" + IntString(cfs_index) + ".path");
+		Load_Path(path + "\\path\\" + Functs::IntString(cfs_index) + ".path");
 		single_paths.push_back(single_path);
 
 		//post_processing of single_final_path
-		if (Load_Final_Path(path + "\\path\\" + IntString(cfs_index) + "_final.path"))
+		if (Load_Final_Path(path + "\\path\\" + Functs::IntString(cfs_index) + "_final.path"))
 		{
 	
 
@@ -1404,8 +1404,8 @@ void CFSCNC::ShowScallopComputation()
 				Vector3d v0 = single_final_path[i - 1];
 				Vector3d v1 = single_final_path[i];
 				Vector3d v2 = single_final_path[i + 1];
-				double angle = getAngleBetween(v1 - v0, v2 - v1);
-				angle = angle / MM_PI*180.0;
+				double angle = Functs::GetAngleBetween(v1 - v0, v2 - v1);
+				angle = angle / Math_PI*180.0;
 			
 				if (angle >= 4.0){
 					single_final_path_0.push_back(v1);
@@ -1603,13 +1603,13 @@ void CFSCNC::ShowScallopComputation()
 					int upper_index = index_0;
 					int lower_index = index_1;
 
-					std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\sharingpart_" + IntString(upper_index) + "_" + IntString(lower_index) + ".obj");
+					std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\sharingpart_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index) + ".obj");
 					int debug_index = 1;
 					for (int i = 0; i < sharing_parts_0.size(); i++)
 					{
 						for (int j = 0; j < sharing_parts_0[i].size() - 1; j++)
 						{
-							CGAL_Export_Path_Segment(debug_file, debug_index, "debug_0_" + IntString(upper_index) + "_" + IntString(lower_index), 1.0, 0.0, 0.0,
+							CGAL_Export_Path_Segment(debug_file, debug_index, "debug_0_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index), 1.0, 0.0, 0.0,
 								sharing_parts_0[i][j], sharing_parts_0[i][j + 1], 0.1);
 						}
 					}
@@ -1617,7 +1617,7 @@ void CFSCNC::ShowScallopComputation()
 					{
 						for (int j = 0; j < sharing_parts_1[i].size() - 1; j++)
 						{
-							CGAL_Export_Path_Segment(debug_file, debug_index, "debug_1_" + IntString(upper_index) + "_" + IntString(lower_index), 1.0, 0.0, 0.0,
+							CGAL_Export_Path_Segment(debug_file, debug_index, "debug_1_" + Functs::IntString(upper_index) + "_" + Functs::IntString(lower_index), 1.0, 0.0, 0.0,
 								sharing_parts_1[i][j], sharing_parts_1[i][j + 1], 0.1);
 						}
 					}
@@ -1649,16 +1649,16 @@ void CFSCNC::ShowScallopComputation()
 							Vector3d v0 = sharing_parts_0[i][j - 1];
 							Vector3d v1 = sharing_parts_0[i][j];
 							Vector3d v2 = sharing_parts_0[i][j + 1];
-							double angle = getAngleBetween(v0 - v1, v2 - v1) / MM_PI*180.0;
+							double angle = Functs::GetAngleBetween(v0 - v1, v2 - v1) / Math_PI*180.0;
 
 							delta_ps_0 = Circuit::DeltaDEuclideanDistance(sharing_parts_0[i][j], toolpath_size, source_node->points);
-							angle += Strip::GetTotalAngles(delta_ps_0[0]) / MM_PI*180.0;
-							angle += Strip::GetTotalAngles(delta_ps_0[1]) / MM_PI*180.0;
+							angle += Strip::GetTotalAngles(delta_ps_0[0]) / Math_PI*180.0;
+							angle += Strip::GetTotalAngles(delta_ps_0[1]) / Math_PI*180.0;
 
 							source_p_1 = Circuit::FindNearestPoint(sharing_parts_0[i][j], target_node->points);//neareast point from source_p_0 to target node points
 							delta_ps_1 = Circuit::DeltaDEuclideanDistance(source_p_1, toolpath_size, target_node->points);
-							angle += Strip::GetTotalAngles(delta_ps_1[0]) / MM_PI*180.0;
-							angle += Strip::GetTotalAngles(delta_ps_1[1]) / MM_PI*180.0;
+							angle += Strip::GetTotalAngles(delta_ps_1[0]) / Math_PI*180.0;
+							angle += Strip::GetTotalAngles(delta_ps_1[1]) / Math_PI*180.0;
 
 							if (delta_ps_0.size() != 2 || delta_ps_1.size() != 2) continue;//delta_ps_0 and delta_ps_1 must have two elements, forward and backward
 							if (CheckValidDirection(sharing_parts_0[i][j], delta_ps_0, source_p_1, delta_ps_1)) //delta_ps_0 and delta_ps_1 must have the same directions
@@ -1742,11 +1742,11 @@ void CFSCNC::ShowScallopComputation()
 					//Today I meet one bug.
 					//From this bug, I learn the two cutting parts must be the same;
 					/////////////////////////////////////////////////////////////////////////////////////
-					std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\debug_" + IntString(index_0) + "_" + IntString(index_1) + ".obj");
+					std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\debug_" + Functs::IntString(index_0) + "_" + Functs::IntString(index_1) + ".obj");
 					int debug_index = 1;
-					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + IntString(index_0) + "_" + IntString(index_1), 1.0, 0.0, 0.0,
+					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + Functs::IntString(index_0) + "_" + Functs::IntString(index_1), 1.0, 0.0, 0.0,
 						segment_0[0], segment_0[1], 0.1);
-					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + IntString(index_0) + "_" + IntString(index_1), 1.0, 0.0, 0.0,
+					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + Functs::IntString(index_0) + "_" + Functs::IntString(index_1), 1.0, 0.0, 0.0,
 						segment_1[0], segment_1[1], 0.1);
 					debug_file.clear();
 					debug_file.close();
@@ -1772,11 +1772,11 @@ void CFSCNC::ShowScallopComputation()
 					//Today I meet one bug.
 					//From this bug, I learn the two cutting parts must be the same;
 					/////////////////////////////////////////////////////////////////////////////////////
-					std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\debug_" + IntString(index_0) + "_" + IntString(index_1) + ".obj");
+					std::ofstream debug_file("Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\debug_" + Functs::IntString(index_0) + "_" + Functs::IntString(index_1) + ".obj");
 					int debug_index = 1;
-					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + IntString(index_0) + "_" + IntString(index_1), 1.0, 0.0, 0.0,
+					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + Functs::IntString(index_0) + "_" + Functs::IntString(index_1), 1.0, 0.0, 0.0,
 						segment_0[0], segment_0[1], 0.1);
-					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + IntString(index_0) + "_" + IntString(index_1), 1.0, 0.0, 0.0,
+					CGAL_Export_Path_Segment(debug_file, debug_index, "debug_" + Functs::IntString(index_0) + "_" + Functs::IntString(index_1), 1.0, 0.0, 0.0,
 						segment_1[0], segment_1[1], 0.1);
 					debug_file.clear();
 					debug_file.close();
@@ -1850,7 +1850,7 @@ void CFSCNC::ShowScallopComputation()
 					Vector3d v0 = sharing_parts_0[i][j - 1];
 					Vector3d v1 = sharing_parts_0[i][j];
 					Vector3d v2 = sharing_parts_0[i][j + 1];
-					double angle = getAngleBetween(v0 - v1, v2 - v1) / MM_PI*180.0;
+					double angle = Functs::GetAngleBetween(v0 - v1, v2 - v1) / Math_PI*180.0;
 					if (angle < min_angle)
 					{
 						min_angle = angle;
@@ -1879,7 +1879,7 @@ void CFSCNC::ShowScallopComputation()
 
 				goon = false;
 
-				if (iter == 0 || isAlmostZero(getLength(last_cutting_part[last_cutting_part.size() - 1], delta_ps_0[0][delta_ps_0[0].size() - 1])))
+				if (iter == 0 || Functs::IsAlmostZero(Functs::GetLength(last_cutting_part[last_cutting_part.size() - 1], delta_ps_0[0][delta_ps_0[0].size() - 1])))
 				{
 					cutting_part_0 = delta_ps_0[0];//short part between two cutting points of source node
 					cutting_part_1 = delta_ps_1[0];//short part between two cutting points of target node
@@ -1899,7 +1899,7 @@ void CFSCNC::ShowScallopComputation()
 				double part_0_par_0 = Circuit::FindNearestPointPar(cutting_part_0[0], node_0->points);
 				double part_0_par_1 = Circuit::FindNearestPointPar(cutting_part_0[cutting_part_0.size() - 1], node_0->points);
 				Vector3d1 vec_0 = Circuit::SelectOnePartOffset(node_0->points, part_0_par_0, part_0_par_1);
-				if (isAlmostZero(abs(Strip::GetTotalLength(vec_0) - Strip::GetTotalLength(cutting_part_0))))
+				if (Functs::IsAlmostZero(abs(Strip::GetTotalLength(vec_0) - Strip::GetTotalLength(cutting_part_0))))
 					cutting_part_2 = Circuit::SelectOnePartOffset(node_0->points, part_0_par_1, part_0_par_0);
 				else
 				{
@@ -1913,7 +1913,7 @@ void CFSCNC::ShowScallopComputation()
 				double part_1_par_0 = Circuit::FindNearestPointPar(cutting_part_1[0], node_1->points);
 				double part_1_par_1 = Circuit::FindNearestPointPar(cutting_part_1[cutting_part_1.size() - 1], node_1->points);
 				Vector3d1 vec_1 = Circuit::SelectOnePartOffset(node_1->points, part_1_par_0, part_1_par_1);
-				if (isAlmostZero(abs(Strip::GetTotalLength(vec_1) - Strip::GetTotalLength(cutting_part_1))))
+				if (Functs::IsAlmostZero(abs(Strip::GetTotalLength(vec_1) - Strip::GetTotalLength(cutting_part_1))))
 					cutting_part_3 = Circuit::SelectOnePartOffset(node_1->points, part_1_par_1, part_1_par_0);
 				else
 				{
@@ -2155,8 +2155,8 @@ void CFSCNC::ShowScallopComputation()
 				Vector3d v0 = parts_0[i][j - 1];
 				Vector3d v1 = parts_0[i][j];
 				Vector3d v2 = parts_0[i][j + 1];
-				double angle = getAngleBetween(v0-v1,v2-v1);
-				if (angle < MM_PI *2.0/ 3.0) continue; //try to break at a flat curve
+				double angle = Functs::GetAngleBetween(v0 - v1, v2 - v1);
+				if (angle < Math_PI *2.0/ 3.0) continue; //try to break at a flat curve
 
 				Vector3d source_p_0 = parts_0[i][j];//cutting point of source node
 				Vector3d source_p_1 = Circuit::FindNearestPoint(source_p_0, target_node->points);//cutting point of target node
@@ -2283,7 +2283,7 @@ void CFSCNC::ShowScallopComputation()
 			}
 			else
 			{
-				if (Math::GetLength(part.points.back() - part.points.front())<0.1)
+				if (Functs::GetLength(part.points.back() - part.points.front())<0.1)
 					goon = false;
 			}
 
@@ -2306,7 +2306,7 @@ void CFSCNC::ShowScallopComputation()
 						Vector3d p1 = parts[j].points[0];
 						
 						if (CGAL_3D_Distance_Point_Point(p0, p1)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2320,7 +2320,7 @@ void CFSCNC::ShowScallopComputation()
 						Vector3d p2 = parts[j].points[parts[j].points.size() - 1];
 
 						if (CGAL_3D_Distance_Point_Point(p0, p1)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2329,7 +2329,7 @@ void CFSCNC::ShowScallopComputation()
 						}
 
 						if (CGAL_3D_Distance_Point_Point(p0, p2)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2353,7 +2353,7 @@ void CFSCNC::ShowScallopComputation()
 						Vector3d p3 = parts[j].points[0];
 
 						if (CGAL_3D_Distance_Point_Point(p0, p3)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2362,7 +2362,7 @@ void CFSCNC::ShowScallopComputation()
 						}
 
 						if (CGAL_3D_Distance_Point_Point(p1, p3)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(1);
@@ -2386,7 +2386,7 @@ void CFSCNC::ShowScallopComputation()
 						}
 
 						if (CGAL_3D_Distance_Point_Point(p0, p2)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2394,7 +2394,7 @@ void CFSCNC::ShowScallopComputation()
 							merge_edge.push_back(0);
 						}
 						if (CGAL_3D_Distance_Point_Point(p1, p2)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p1, p2)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p1, p2)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(1);
@@ -2404,7 +2404,7 @@ void CFSCNC::ShowScallopComputation()
 						}
 
 						if (CGAL_3D_Distance_Point_Point(p0, p3)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2414,7 +2414,7 @@ void CFSCNC::ShowScallopComputation()
 						}
 
 						if (CGAL_3D_Distance_Point_Point(p1, p3)<0.1)
-						//if (isAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
+						//if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(1);
@@ -2490,7 +2490,7 @@ void CFSCNC::ShowScallopComputation()
 			mst.push_back(a2);
 		}
 
-		Output_tree(parts.size(), mst, "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\mst.gml");
+		Functs::Output_tree(parts.size(), mst, "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\mst.gml");
 		/**************************************************/
 
 		//single_path.assign(parts[0].points.begin(), parts[0].points.end());
@@ -2522,7 +2522,7 @@ void CFSCNC::ShowScallopComputation()
 					if (parts[j].points.size() == 1)
 					{
 						Vector3d p1 = parts[j].points[0];
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2535,14 +2535,14 @@ void CFSCNC::ShowScallopComputation()
 						Vector3d p1 = parts[j].points[0];
 						Vector3d p2 = parts[j].points[parts[j].points.size() - 1];
 
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p1)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
 							merge_edge.push_back(j);
 							merge_edge.push_back(0);
 						}
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2564,14 +2564,14 @@ void CFSCNC::ShowScallopComputation()
 					if (parts[j].points.size() == 1)
 					{
 						Vector3d p3 = parts[j].points[0];
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
 							merge_edge.push_back(j);
 							merge_edge.push_back(0);
 						}
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(1);
@@ -2584,14 +2584,14 @@ void CFSCNC::ShowScallopComputation()
 						Vector3d p2 = parts[j].points[0];
 						Vector3d p3 = parts[j].points[parts[j].points.size() - 1];
 
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p2)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
 							merge_edge.push_back(j);
 							merge_edge.push_back(0);
 						}
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p1, p2)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p1, p2)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(1);
@@ -2599,7 +2599,7 @@ void CFSCNC::ShowScallopComputation()
 							merge_edge.push_back(0);
 
 						}
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p0, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(0);
@@ -2607,7 +2607,7 @@ void CFSCNC::ShowScallopComputation()
 							merge_edge.push_back(1);
 
 						}
-						if (isAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
+						if (Functs::IsAlmostZero(CGAL_3D_Distance_Point_Point(p1, p3)))
 						{
 							merge_edge.push_back(i);
 							merge_edge.push_back(1);
@@ -2840,10 +2840,10 @@ void CFSCNC::ShowScallopComputation()
 
 	bool CFSCNC::CheckValidDirection(Vector3d source_p_0, Vector3d2 delta_ps_0, Vector3d source_p_1, Vector3d2 delta_ps_1)
 	{
-		//double angle = getAngleBetween(delta_ps_0[0][delta_ps_0[0].size() - 1] - source_p_0, delta_ps_1[0][delta_ps_1[0].size() - 1] - source_p_1);
+		//double angle = Functs::GetAngleBetween(delta_ps_0[0][delta_ps_0[0].size() - 1] - source_p_0, delta_ps_1[0][delta_ps_1[0].size() - 1] - source_p_1);
 
-		double angle_0 = getAngleBetween(delta_ps_0[0][delta_ps_0[0].size() - 1] - source_p_0, delta_ps_1[0][delta_ps_1[0].size() - 1] - source_p_1);
-		double angle_1 = getAngleBetween(delta_ps_0[0][delta_ps_0[0].size() - 1] - source_p_0, delta_ps_1[1][delta_ps_1[1].size() - 1] - source_p_1);
+		double angle_0 = Functs::GetAngleBetween(delta_ps_0[0][delta_ps_0[0].size() - 1] - source_p_0, delta_ps_1[0][delta_ps_1[0].size() - 1] - source_p_1);
+		double angle_1 = Functs::GetAngleBetween(delta_ps_0[0][delta_ps_0[0].size() - 1] - source_p_0, delta_ps_1[1][delta_ps_1[1].size() - 1] - source_p_1);
 
 		if (angle_0 < angle_1)
 			return false;
@@ -2890,7 +2890,7 @@ void CFSCNC::ShowScallopComputation()
 		//checking whether the part is inside the connecting parts
 		for (int i = 0; i < part.size(); i++)
 		{
-			if (!isAlmostZero(Strip::Distance(part[i], contour_edges[edge_index].sharing_parts_v[index])))
+			if (!Functs::IsAlmostZero(Strip::Distance(part[i], contour_edges[edge_index].sharing_parts_v[index])))
 			{
 				b = false;
 				break;
@@ -2904,7 +2904,7 @@ void CFSCNC::ShowScallopComputation()
 		{
 			for (int i = 0; i < part.size(); i++)
 			{
-				if (isAlmostZero(Strip::Distance(part[i], cutting_parts)))
+				if (Functs::IsAlmostZero(Strip::Distance(part[i], cutting_parts)))
 				{ 
 					double min_d = 100000.0;
 					for (int j = 0; j < cutting_parts.size(); j++)
@@ -2914,7 +2914,7 @@ void CFSCNC::ShowScallopComputation()
 						min_d = min(min_d, d_0);
 						min_d = min(min_d, d_1);
 					}
-					if (!isAlmostZero(min_d))
+					if (!Functs::IsAlmostZero(min_d))
 					{
 						b = false;
 						break;
@@ -2935,7 +2935,7 @@ void CFSCNC::ShowScallopComputation()
 		//checking whether the part is inside the connecting parts
 		for (int i = 0; i < part.size(); i++)
 		{
-			if (!isAlmostZero(Strip::Distance(part[i], contour_edges[edge_index].sharing_parts_v[index])))
+			if (!Functs::IsAlmostZero(Strip::Distance(part[i], contour_edges[edge_index].sharing_parts_v[index])))
 			{
 				b = false;
 				break;
@@ -2947,7 +2947,7 @@ void CFSCNC::ShowScallopComputation()
 		if (cutting_parts.size()>0)
 			for (int i = 0; i < part.size(); i++)
 			{
-				if (isAlmostZero(Strip::Distance(part[i], cutting_parts)))
+				if (Functs::IsAlmostZero(Strip::Distance(part[i], cutting_parts)))
 				{
 					b = false;
 					break;
@@ -2979,7 +2979,7 @@ void CFSCNC::ShowScallopComputation()
 			double length0 = Strip::GetTotalLength(cutting_parts[i]);
 			double length1 = Strip::GetTotalLength(Circuit::SelectOnePartOffset(node->points, par_0, par_1));
 
-			if (isAlmostZero(abs(length0 - length1)))
+			if (Functs::IsAlmostZero(abs(length0 - length1)))
 			{
 				std::vector<double> part_par;
 				part_par.push_back(par_0);
@@ -3076,7 +3076,7 @@ void CFSCNC::ShowScallopComputation()
 			{
 				//if (CGAL_2D_Polygon_Is_Clockwise_Oriented(offsets_2d[i]))
 					//std::reverse(offsets_2d[i].begin(), offsets_2d[i].end());
-				Vector3d1 one_3d_boundary = Math::Vector2d3d(offsets_2d[i]);
+				Vector3d1 one_3d_boundary = Functs::Vector2d3d(offsets_2d[i]);
 				if (goon)
 				{
 					if (one_3d_boundary.size() > 3){

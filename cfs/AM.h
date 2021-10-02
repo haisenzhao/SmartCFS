@@ -1,13 +1,15 @@
 #ifndef AM_ONCE
 #define AM_ONCE
 #pragma once
-#include "MathHelper.h"
+#include "pgl_functs.hpp"
 #include <iostream>
 #include <fstream>
 #include <cassert>
 #include <vector>
 #include <string>
 #include <algorithm>
+
+using namespace PGL;
 
 namespace cnc {
 

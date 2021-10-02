@@ -46,7 +46,6 @@ set(CFS_SOURCES
 	cfs/CFSCNC.h
 	cfs/Circuit.h
 	cfs/Constant.h
-	cfs/MathHelper.h
 	cfs/Output.cpp
 	cfs/RoughMachining.cpp
 	cfs/RoughMachining.h
@@ -86,13 +85,36 @@ ExternalProject_Add(
     LOG_DOWNLOAD ON
     )
 ExternalProject_Get_Property(pgl source_dir)
-
 set(PglIncludeDir ${source_dir})
-set(PglGlmIncludeDir ${source_dir}/glm)
+
+ExternalProject_Add(
+    glm
+    PREFIX ${CMAKE_BINARY_DIR}/glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    )
+ExternalProject_Get_Property(glm source_dir)
+set(GlmIncludeDir ${source_dir})
+
+ExternalProject_Add(
+    ppgl
+    PREFIX ${CMAKE_BINARY_DIR}/ppgl
+    GIT_REPOSITORY https://github.com/haisenzhao/personal-pack-geom-lib.git
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    )
+ExternalProject_Get_Property(ppgl source_dir)
+set(PpglIncludeDir ${source_dir})
 
 
 #MESSAGE(STATUS ${CGAL_INCLUDE_DIR} " found")
-include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR} ${PglIncludeDir} ${PglGlmIncludeDir})
+include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} 
+${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR} ${PglIncludeDir} ${GlmIncludeDir} ${PpglIncludeDir})
 
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-4.7.lib)
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-gd-4.7.lib)
@@ -110,10 +132,10 @@ TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/Wm5Core.
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/Wm5Imagics.lib)
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/Wm5Mathematics.lib)
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/Wm5WglGraphics.lib)
-	
-	
-add_dependencies(${PROJECT_NAME} pgl)
 
+add_dependencies(${PROJECT_NAME} pgl)
+add_dependencies(${PROJECT_NAME} glm)
+add_dependencies(${PROJECT_NAME} ppgl)
 
 #find_library(LIBHELLO_PATH CGAL_Core-vc120-mt-4.7 ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib)
 #IF(NOT LIBHELLO_PATH)
