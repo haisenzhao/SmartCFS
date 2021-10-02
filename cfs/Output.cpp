@@ -269,7 +269,7 @@ namespace cnc {
 		{
 			Vector3d n = Functs::GetCrossproduct(single_final_path_normal[i], single_final_path[i + 1] - single_final_path[i]);
 			//	inline Vector3d RotationAxis(Vector3d p, double angle, Vector3d n)
-			single_final_path_RMDF_normal.push_back(RotationAxis(single_final_path_normal[i], Math_PI / 10, n));
+			single_final_path_RMDF_normal.push_back(Functs::RotationAxis(single_final_path_normal[i], Math_PI / 10, n));
 		}
 		single_final_path_RMDF_normal.push_back(single_final_path_normal[single_final_path_normal.size() - 1]);
 
@@ -768,7 +768,7 @@ namespace cnc {
 
 			for (int i = 0; i < dists.size(); i++){
 
-				if (hpcg::areAlmostEqual(dists[i], min_d))
+				if (Functs::AreAlmostEqual(dists[i], min_d))
 				{
 					pathes.push_back(offsets[i]);
 
@@ -813,7 +813,7 @@ namespace cnc {
 
 			for (int i = 0; i < dists.size(); i++)
 			{
-				if (hpcg::areAlmostEqual(dists[i], min_d))
+				if (Functs::AreAlmostEqual(dists[i], min_d))
 				{
 					pathes.push_back(offsets[i]);
 					dist_labels[i] = false;
@@ -1087,22 +1087,22 @@ namespace cnc {
 			double d_1 = (float)dists[index_1];
 			double d_2 = (float)dists[index_2];
 
-			gradient += (float)dists[index_0] * Functs::GetCrossproduct(n, v_2 - v_1);
-			gradient += (float)dists[index_1] * Functs::GetCrossproduct(n, v_0 - v_2);
-			gradient += (float)dists[index_2] * Functs::GetCrossproduct(n, v_1 - v_0);
+			gradient += dists[index_0] * Functs::GetCrossproduct(n, v_2 - v_1);
+			gradient += dists[index_1] * Functs::GetCrossproduct(n, v_0 - v_2);
+			gradient += dists[index_2] * Functs::GetCrossproduct(n, v_1 - v_0);
 
-			gradient = gradient / (float)(2.0 * area);
+			gradient = gradient / (2.0 * area);
 
 
 			face_gradients.push_back(gradient);
 
-			vecs_gradients[index_0] += (float)area*gradient;
+			vecs_gradients[index_0] += area*gradient;
 			areas[index_0] += area;
 
-			vecs_gradients[index_1] += (float)area*gradient;
+			vecs_gradients[index_1] += area*gradient;
 			areas[index_1] += area;
 
-			vecs_gradients[index_2] += (float)area*gradient;
+			vecs_gradients[index_2] += area*gradient;
 			areas[index_2] += area;
 
 			//Vector3d middle = (v_0 + v_1 + v_2) / (float)3.0;
@@ -1152,7 +1152,7 @@ namespace cnc {
 
 		for (int i = 0; i < vecs.size(); i++)
 		{
-			vecs_gradients[i] = vecs_gradients[i] / (float)areas[i];
+			vecs_gradients[i] = vecs_gradients[i] / (double)areas[i];
 
 			//Functs::SetVectorLength(vecs_gradients[i], 0.3);
 			//CGAL_Export_Path_Segment(export_fie, export_int, "name_" + Functs::IntString(i), 1.0, 0.0, 0.0, vecs[i], vecs[i] + vecs_gradients[i], 0.02);

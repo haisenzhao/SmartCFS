@@ -1737,7 +1737,7 @@ void CFSCNC::ShowScallopComputation()
 				edge->connecting_segments.push_back(segment_0);
 				edge->connecting_segments.push_back(segment_1);
 
-				if (MyGetUserName() == "debug")
+				if (Functs::MyGetUserName() == "debug")
 				{
 					//Today I meet one bug.
 					//From this bug, I learn the two cutting parts must be the same;
@@ -1767,7 +1767,7 @@ void CFSCNC::ShowScallopComputation()
 				edge->connecting_segments.push_back(segment_1);
 				edge->connecting_segments.push_back(segment_0);
 
-				if (MyGetUserName() == "debug")
+				if (Functs::MyGetUserName() == "debug")
 				{
 					//Today I meet one bug.
 					//From this bug, I learn the two cutting parts must be the same;
@@ -3206,9 +3206,8 @@ void CFSCNC::ShowScallopComputation()
 
 					for (int k = 0; k < insert_nb; k++)
 					{
-						float d = (float)(k + 1) / (float)(insert_nb + 1);
-
-						one_boudary.push_back((float)(1.0 - d)*v0 + d*v1);
+						double d = (float)(k + 1) / (float)(insert_nb + 1);
+						one_boudary.push_back((1.0 - d)*v0 + d*v1);
 					}
 				}
 

@@ -570,7 +570,7 @@ namespace cnc {
 
 		Vector3d3 removed_offsets;
 
-		if (output_rerun || !LoadVectors(path + "output\\mesh_slicer.txt", rough_boundaries) || !LoadVectors(path + "output\\mesh_slicer_removed_offsets.txt", removed_offsets))
+		if (output_rerun || !Functs::LoadVectors(path + "output\\mesh_slicer.txt", rough_boundaries) || !Functs::LoadVectors(path + "output\\mesh_slicer_removed_offsets.txt", removed_offsets))
 		{
 			Vector3d plane_p(0.0, 0.0, 0.0);
 
@@ -595,7 +595,7 @@ namespace cnc {
 				std::cerr << "#Output offsets..." << std::endl;
 				for (int i = 0; i < original_offsetses.size(); i++)
 				{
-					auto a = PosApplyM(original_offsetses[i], glm::inverse(rm));
+					auto a = Functs::PosApplyM(original_offsetses[i], glm::inverse(rm));
 					Circuit::OutputOffsets(path + "boundary\\boudary_original_" + std::to_string(i) + ".obj", a, "boudary_original_" + std::to_string(i));
 				}
 			}
@@ -626,7 +626,7 @@ namespace cnc {
 							auto v = Functs::PosApplyM(Functs::Vector2d3d(clear_points_2d, plane_d[i]), glm::inverse(rm));
 							Circuit::OutputOffsets1(path + "debug\\debug.obj", v);
 
-							v = PosApplyM(Functs::Vector2d3d(points_2d, plane_d[i]), glm::inverse(rm));
+							v = Functs::PosApplyM(Functs::Vector2d3d(points_2d, plane_d[i]), glm::inverse(rm));
 							Circuit::OutputOffsets1(path + "debug\\debug1.obj", v);
 
 							std::cerr << "if (!CGAL_2D_Polygon_Simple(clear_points_2d))" << std::endl;

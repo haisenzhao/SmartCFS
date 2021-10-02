@@ -639,7 +639,7 @@ namespace cnc {
 						bool b1 = GetSharingParts1(toolpath_size, offsets[lower_index], offsets[upper_index], sharing_parts_1);
 
 
-						if (MyGetUserName() == "debug")
+						if (Functs::MyGetUserName() == "debug")
 						{
 							if ((upper_index == 30 && lower_index == 32) || (lower_index == 30 && upper_index == 32))
 							{

@@ -28,7 +28,7 @@ namespace cnc {
 			auto nnn = normal;
 			auto aaa = Functs::SetVectorLength(nnn, depth);
 
-			double angle = i *  Functs::Math_PI / 4;
+			double angle = i *  Math_PI / 4;
 			Vector3d v = Functs::RotationAxis(base_1 + aaa, angle, normal);
 			vecs.push_back(v + start);
 		}
@@ -58,14 +58,14 @@ namespace cnc {
 
 		plane_n = -plane_n;
 		origin_n = plane_n;
-		rm = RotationMatrix(Vector3d(0.0, 0.0, 1.0), plane_n);
+		rm = Functs::RotationMatrix(Vector3d(0.0, 0.0, 1.0), plane_n);
 		plane_n = Vector3d(0.0, 0.0, 1.0);
 
 		Vector3d1 vecs;
 		std::vector<int> face_id_0, face_id_1, face_id_2;
 		CGAL_3D_Read_Triangle_Mesh(path + obj_file, vecs, face_id_0, face_id_1, face_id_2);
 
-		vecs = PosApplyM(vecs, rm);
+		vecs = Functs::PosApplyM(vecs, rm);
 
 		CGAL_Output_Off(path + "transform.off", vecs, face_id_0, face_id_1, face_id_2);
 		CGAL_Output_Obj(path + "transform.obj", vecs, face_id_0, face_id_1, face_id_2);
@@ -199,7 +199,7 @@ namespace cnc {
 		Vector3d origin_n;
 	
 		LoadSetting(path, plane_n, origin_n, plane_d, cfs.toolpath_size, layer_thichness, rm, obj_file, off_file, set_toolpath_size, set_layer_thickness);
-		auto strings = Split(path,"\\");
+		auto strings = Functs::SplitStr(path, "\\");
 		std::string folder_name = strings[strings.size()-2];
 
 		//mesh slicer
@@ -219,7 +219,7 @@ namespace cnc {
 			std::cerr << "#Output offsets..." << std::endl;
 			for (int i = 0; i < rough_boundaries.size(); i++)
 			{
-				auto a = PosApplyM(rough_boundaries[i], glm::inverse(rm));
+				auto a = Functs::PosApplyM(rough_boundaries[i], glm::inverse(rm));
 				Circuit::OutputOffsets(path + "boundary\\boudary_original_" + std::to_string(i) + ".obj", a, "boudary_original_" + std::to_string(i));
 			}
 		}
@@ -257,7 +257,7 @@ namespace cnc {
 				{
 					auto  node_index = sequences[seg_index][i];
 					auto name = "layer_boundary_" + std::to_string(seg_index) + "_" + std::to_string(i) + "_" + Functs::IntString(node_index);
-					auto a = PosApplyM(base_nodes[node_index].boundary, glm::inverse(rm));
+					auto a = Functs::PosApplyM(base_nodes[node_index].boundary, glm::inverse(rm));
 					Circuit::OutputOffsets(path + "boundary\\" + name + ".obj", a, name);
 				}
 			}
@@ -278,17 +278,17 @@ namespace cnc {
 
 			Vector3d1 rough_machining_path;
 
-			if (re_running || !LoadVectors(path + "output\\rough_machining_path.txt", rough_machining_path))
+			if (re_running || !Functs::LoadVectors(path + "output\\rough_machining_path.txt", rough_machining_path))
 			{
 				//sequence order
 				//TODO
 
 				rough_machining_path = RoughPathGeneration(plane_d, plane_n, layer_thichness, base_nodes, sequences, rm);
-				OutputVectors(path + "output\\rough_machining_path.txt", rough_machining_path);
+				Functs::OutputVectors(path + "output\\rough_machining_path.txt", rough_machining_path);
 			}
 
 			std::cerr << "#Output strips..." << std::endl;
-			rough_machining_path = PosApplyM(rough_machining_path, glm::inverse(rm));
+			rough_machining_path = Functs::PosApplyM(rough_machining_path, glm::inverse(rm));
 
 			if (output_debug) Circuit::OutputStrip(path + "output\\rough_path.obj", rough_machining_path);
 			std::cerr << "#Output g-code..." << std::endl;
@@ -317,7 +317,7 @@ namespace cnc {
 		{
 			for (int j = 0; j < cut_offsets[i].size(); j++)
 			{
-				auto v = PosApplyM(cut_offsets[i][j], glm::inverse(rm));
+				auto v = Functs::PosApplyM(cut_offsets[i][j], glm::inverse(rm));
 				file << "v " << v[0] << " " << v[1] << " " << v[2] << std::endl;
 			}
 		}
@@ -350,7 +350,7 @@ namespace cnc {
 
 			for (int i = 0; i<points_3d.size(); i++)
 			{
-				auto v = PosApplyM(points_3d[i], glm::inverse(rm));
+				auto v = Functs::PosApplyM(points_3d[i], glm::inverse(rm));
 				file << "v " <<v[0] << " " << v[1] << " " << v[2] << std::endl;
 				//file << "v " << points_3d[i][0] << " " << points_3d[i][1] << " " << points_3d[i][2] << std::endl;
 			}
@@ -371,7 +371,7 @@ namespace cnc {
 	{
 		Vector3d3 removed_offsets;
 		
-		if (output_rerun || !LoadVectors(path + "output\\mesh_slicer.txt", rough_boundaries) || !LoadVectors(path + "output\\mesh_slicer_removed_offsets.txt", removed_offsets))
+		if (output_rerun || !Functs::LoadVectors(path + "output\\mesh_slicer.txt", rough_boundaries) || !Functs::LoadVectors(path + "output\\mesh_slicer_removed_offsets.txt", removed_offsets))
 		{
 			Vector3d plane_p(0.0, 0.0, 0.0);
 
@@ -396,7 +396,7 @@ namespace cnc {
 				std::cerr << "#Output offsets..." << std::endl;
 				for (int i = 0; i < original_offsetses.size(); i++)
 				{
-					auto a = PosApplyM(original_offsetses[i], glm::inverse(rm));
+					auto a = Functs::PosApplyM(original_offsetses[i], glm::inverse(rm));
 					Circuit::OutputOffsets(path + "boundary\\boudary_original_" + std::to_string(i) + ".obj", a, "boudary_original_" + std::to_string(i));
 				}
 			}
@@ -424,10 +424,10 @@ namespace cnc {
 							auto area = CGAL_2D_Polygon_Area(clear_points_2d);
 
 
-							auto v = PosApplyM(Functs::Vector2d3d(clear_points_2d, plane_d[i]), glm::inverse(rm));
+							auto v = Functs::PosApplyM(Functs::Vector2d3d(clear_points_2d, plane_d[i]), glm::inverse(rm));
 							Circuit::OutputOffsets1(path + "debug\\debug.obj", v);
 
-							v = PosApplyM(Functs::Vector2d3d(points_2d, plane_d[i]), glm::inverse(rm));
+							v = Functs::PosApplyM(Functs::Vector2d3d(points_2d, plane_d[i]), glm::inverse(rm));
 							Circuit::OutputOffsets1(path + "debug\\debug1.obj", v);
 
 							std::cerr << "if (!CGAL_2D_Polygon_Simple(clear_points_2d))" << std::endl;
@@ -459,11 +459,11 @@ namespace cnc {
 			}
 
 			//Circuit::OutputOffsets(path + "boundary\\boudary_removed.obj", removed_offsets,"boudary_removed");
-			OutputVectors(path + "output\\mesh_slicer.txt", rough_boundaries);
-			OutputVectors(path + "output\\mesh_slicer_removed_offsets.txt", removed_offsets);
+			Functs::OutputVectors(path + "output\\mesh_slicer.txt", rough_boundaries);
+			Functs::OutputVectors(path + "output\\mesh_slicer_removed_offsets.txt", removed_offsets);
 		}
 
-		if (output_rerun || !LoadExisting(path + "output\\initial_cut_contours.obj"))
+		if (output_rerun || !Functs::LoadExisting(path + "output\\initial_cut_contours.obj"))
 		{
 			//remove small mesh
 			std::vector<BaseNode> base_nodes;
@@ -792,7 +792,7 @@ namespace cnc {
 				for (int i = 0; i < base_nodes.size(); i++)
 				{
 					auto name = "base_node_" + Functs::IntString(i) + "_" + std::to_string(base_nodes[i].layer);
-					auto a = PosApplyM(base_nodes[i].boundary, glm::inverse(rm));
+					auto a = Functs::PosApplyM(base_nodes[i].boundary, glm::inverse(rm));
 					Circuit::OutputOffsets(path + "boundary\\" + name + ".obj", a, name);
 					name = "base_node_tri_" + Functs::IntString(i) + "_" + std::to_string(base_nodes[i].layer);
 					OutputNodeTriangles(path + "boundary\\" + name + ".obj", base_nodes[i].boundary, rm);
@@ -874,7 +874,7 @@ namespace cnc {
 			};
 
 			//debug
-			Output_tree(base_nodes.size(), mst, "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\layer.gml");
+			Functs::Output_tree(base_nodes.size(), mst, "Z:\\Documents\\Windows\\SmartSFC\\workspace\\CFS\\layer.gml");
 
 			OutputBaseNodesSequences(path + "output\\nodes_sequences.txt", base_nodes, layer_nodes,mst);
 		}
@@ -931,7 +931,7 @@ namespace cnc {
 					for (int k = 0; k < cur_points[j].size(); k++)
 					{
 						cur_vecs.back().emplace_back(nb + o_index);
-						auto v = PosApplyM(cur_points[j][k],glm::inverse(rm));
+						auto v = Functs::PosApplyM(cur_points[j][k], glm::inverse(rm));
 						o_file << "v " << v[0] << " " << v[1] << " " << v[2] << std::endl;
 						nb++;
 					}
@@ -950,7 +950,7 @@ namespace cnc {
 					for (int k = 0; k < pre_points[j].size(); k++)
 					{
 						pre_vecs.back().emplace_back(nb  + o_index);
-						auto v = PosApplyM(pre_points[j][k], glm::inverse(rm));
+						auto v = Functs::PosApplyM(pre_points[j][k], glm::inverse(rm));
 						o_file << "v " << v[0] << " " << v[1] << " " << v[2] << std::endl;
 						nb++;
 					}
@@ -1106,7 +1106,7 @@ namespace cnc {
 						}
 						else
 						{
-							if (indicator[i][j] != b) segs.emplace_back((pare_boundary[i][j]+segs.back())/(float)2.0);
+							if (indicator[i][j] != b) segs.emplace_back((pare_boundary[i][j]+segs.back())/(double)2.0);
 							break;
 						}
 					}
@@ -1124,7 +1124,7 @@ namespace cnc {
 						}
 						else
 						{
-							if (indicator[i][jj] != b) segs.insert(segs.begin(),(pare_boundary[i][jj] + segs.front()) / (float)2.0);
+							if (indicator[i][jj] != b) segs.insert(segs.begin(),(pare_boundary[i][jj] + segs.front()) / (double)2.0);
 							break;
 						}
 					}
@@ -1140,7 +1140,7 @@ namespace cnc {
 					//bool CGAL_2D_Detect_Polygon_Inside(Vector2d2 outside_pys, Vector2d pppp)
 					for (double d = 0.2; d < 1.0; d += 0.2)
 					{
-						if (!CGAL_2D_Detect_Polygon_Inside(pare_boundary, (float)d*s + (float)(1.0 - d)*e))
+						if (!CGAL_2D_Detect_Polygon_Inside(pare_boundary, (double)d*s + (double)(1.0 - d)*e))
 							return false;
 					}
 					return true;
@@ -1370,7 +1370,7 @@ namespace cnc {
 			Vector3d x,y,z;
 			z = n;
 			double angle = Functs::GetAngleBetween(z, Vector3d(0.0, 1.0, 0.0));
-			angle = RadiantoAngle(angle);
+			angle = Functs::RadiantoAngle(angle);
 			if (Functs::IsAlmostZero(angle))
 			{
 				z = Vector3d(0.0, 1.0, 0.0);
@@ -1379,19 +1379,19 @@ namespace cnc {
 			}
 			else
 			{
-				Vector3d axis = GetCrossproduct(z, Vector3d(0.0, 1.0, 0.0));
-				y = RotationAxis(z, Math_PI / 2.0, axis);
-				x = GetCrossproduct(y, z);
+				Vector3d axis = Functs::GetCrossproduct(z, Vector3d(0.0, 1.0, 0.0));
+				y = Functs::RotationAxis(z, Math_PI / 2.0, axis);
+				x = Functs::GetCrossproduct(y, z);
 			}
-			Functs::ClearVector3d(x);
-			Functs::ClearVector3d(y);
-			Functs::ClearVector3d(z);
-			x = x / (float)Functs::GetLength(x);
-			y = y / (float)Functs::GetLength(y);
-			z = z / (float)Functs::GetLength(z);
+			Functs::ZeroVector(x);
+			Functs::ZeroVector(y);
+			Functs::ZeroVector(z);
+			x = x / (double)Functs::GetLength(x);
+			y = y / (double)Functs::GetLength(y);
+			z = z / (double)Functs::GetLength(z);
 
 			//m
-			m = RotationMatrixXYZ(x, y, z);
+			m = Functs::RotationMatrixXYZ(x, y, z);
 
 			//AB
 			if (Functs::IsAlmostZero(angle))
@@ -1403,7 +1403,7 @@ namespace cnc {
 			{
 				A = 90.0 - angle;
 				B = Functs::GetAngleBetween(Vector3d(z[0],0.0,z[2]), Vector3d(0.0, 0.0, 1.0));
-				B = RadiantoAngle(B);
+				B = Functs::RadiantoAngle(B);
 				if (z[0] > 0.0)B = 360.0 - B;
 			}
 		};
@@ -1432,7 +1432,7 @@ namespace cnc {
 			Vector3d rotate_v = fusion_g;
 			//=>tool path rotation
 			//rotate_v = RotationAxis(rotate_v, Math_PI / 2.0*(plane_n.z), Vector3d(0.0, 1.0, 0.0));
-			rotate_v = PosApplyM(rotate_v, rm);
+			rotate_v = Functs::PosApplyM(rotate_v, rm);
 			vecs.emplace_back(rotate_v);
 		}
 
@@ -1601,7 +1601,7 @@ namespace cnc {
 			Strip::ConnectingSameDirectionLines(layer_path);
 
 
-			auto v = PosApplyM(layer_path, glm::inverse(rm));
+			auto v = Functs::PosApplyM(layer_path, glm::inverse(rm));
 			auto pre_name = path + "path\\layer_spiral_" + std::to_string(segment_index) + "_" + std::to_string(i);
 
 			cfs.OutputStripNGC(pre_name + ".ngc", v);

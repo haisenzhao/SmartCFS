@@ -38,9 +38,9 @@ namespace cnc {
 		for (int i = 0; i < triangle.size(); i++)
 		{
 			int id = triangle[i];
-			int vertice_id_0 = VectorContainReturnIndex(m, face_id_0[id]);
-			int vertice_id_1 = VectorContainReturnIndex(m, face_id_1[id]);
-			int vertice_id_2 = VectorContainReturnIndex(m, face_id_2[id]);
+			int vertice_id_0 = Functs::VectorContainReturnIndex(m, face_id_0[id]);
+			int vertice_id_1 = Functs::VectorContainReturnIndex(m, face_id_1[id]);
+			int vertice_id_2 = Functs::VectorContainReturnIndex(m, face_id_2[id]);
 			if (vertice_id_0 < 0){
 				m.push_back(face_id_0[id]);
 				vertice_id_0 = m.size() - 1;
