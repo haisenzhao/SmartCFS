@@ -88,10 +88,11 @@ ExternalProject_Add(
 ExternalProject_Get_Property(pgl source_dir)
 
 set(PglIncludeDir ${source_dir})
+set(PglGlmIncludeDir ${source_dir}/glm)
 
 
 #MESSAGE(STATUS ${CGAL_INCLUDE_DIR} " found")
-include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR} ${PglIncludeDir})
+include_directories(${PROJECT_SOURCE_DIR} ${CGAL_INCLUDE_DIR} ${ThirdPartyLibs_INCLUDE_DIR} ${PYMESH_INCLUDE_DIR} ${CFS_INCLUDE_DIR} ${PglIncludeDir} ${PglGlmIncludeDir})
 
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-4.7.lib)
 TARGET_LINK_LIBRARIES(SmartCFS ${PROJECT_SOURCE_DIR}/ThirdPartyLibs/lib/CGAL-vc120-mt-gd-4.7.lib)
