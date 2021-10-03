@@ -20,9 +20,9 @@
 
 
 #include <CGAL/subdivision_method_3.h>
-#include<CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include<CGAL/Polygon_with_holes_2.h>
-#include<CGAL/create_offset_polygons_from_polygon_with_holes_2.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Polygon_with_holes_2.h>
+#include <CGAL/create_offset_polygons_from_polygon_with_holes_2.h>
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/bounding_box.h>
 #include <CGAL/barycenter.h>
@@ -30,7 +30,7 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/squared_distance_2.h>
 #include <CGAL/intersections.h>
-#include<CGAL/create_straight_skeleton_from_polygon_with_holes_2.h>
+#include <CGAL/create_straight_skeleton_from_polygon_with_holes_2.h>
 #include <CGAL/Segment_Delaunay_graph_2.h>
 #include <CGAL/Segment_Delaunay_graph_filtered_traits_2.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>

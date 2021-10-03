@@ -167,8 +167,7 @@ void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path)
 	}
 }
 
-void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path,
-	Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2)
+void  Construct_Polyhedron(Polyhedron_3 &polyhedron, std::string path, Vector3d1 &vecs, std::vector<int> &face_id_0, std::vector<int> &face_id_1, std::vector<int> &face_id_2)
 {
 	if (path.substr(path.size() - 3, path.size()) == "off")
 	{
